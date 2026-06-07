@@ -28,8 +28,11 @@ export default function LoginPage() {
     setError('')
 
     try {
-      // Ensure DB is initialised before creating the user
-      await fetch('/api/init')
+      const initRes = await fetch('/api/init')
+      if (!initRes.ok) {
+        const { error } = await initRes.json().catch(() => ({}))
+        throw new Error(error || 'Database not reachable — check Vercel Postgres is connected')
+      }
 
       const res = await fetch('/api/users', {
         method: 'POST',
@@ -38,14 +41,15 @@ export default function LoginPage() {
       })
 
       if (!res.ok) {
-        throw new Error('Failed to log in')
+        const { error } = await res.json().catch(() => ({}))
+        throw new Error(error || 'Failed to log in')
       }
 
       const user = await res.json()
       localStorage.setItem('gym_user', JSON.stringify(user))
       router.push('/dashboard')
-    } catch {
-      setError('Something went wrong. Please try again.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
