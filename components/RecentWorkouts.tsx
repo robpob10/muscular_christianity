@@ -30,7 +30,7 @@ export default function RecentWorkouts({ refreshKey }: { refreshKey: number }) {
   return (
     <div className="mb-6 space-y-1 flex flex-col items-center">
       {logs.map(log => (
-        <div key={log.id} className="flex items-center gap-5 text-sm font-mono text-leather-400">
+        <div key={log.id} className="grid text-sm font-mono text-leather-400" style={{ gridTemplateColumns: '7rem 12rem 6rem 4rem' }}>
           <span>{log.user_name}</span>
           <span>{capitalize(log.exercise_name)}</span>
           <span>{parseFloat(log.weight_kg)} kg</span>
