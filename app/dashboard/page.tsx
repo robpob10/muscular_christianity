@@ -41,22 +41,38 @@ export default function DashboardPage() {
   }, [activeExercise])
 
   useEffect(() => {
-    // Initialize DB
-    fetch('/api/init').catch(() => {})
-
-    // Check auth
     const stored = localStorage.getItem('gym_user')
     if (!stored) {
       router.push('/')
       return
     }
+    let parsed: User
     try {
-      const parsed = JSON.parse(stored) as User
-      setUser(parsed)
+      parsed = JSON.parse(stored) as User
     } catch {
       localStorage.removeItem('gym_user')
       router.push('/')
+      return
     }
+
+    // Re-validate user against DB (handles stale IDs after DB resets)
+    fetch('/api/init')
+      .then(() =>
+        fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: parsed.name }),
+        })
+      )
+      .then((res) => res.json())
+      .then((freshUser: User) => {
+        localStorage.setItem('gym_user', JSON.stringify(freshUser))
+        setUser(freshUser)
+      })
+      .catch(() => {
+        // Fallback to stored value if network fails
+        setUser(parsed)
+      })
   }, [router])
 
   useEffect(() => {
@@ -102,18 +118,9 @@ export default function DashboardPage() {
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
-              <svg
-                className="w-4 h-4 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                />
+              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="10.5" y="2" width="3" height="20" rx="1" />
+                <rect x="4" y="7" width="16" height="3" rx="1" />
               </svg>
             </div>
             <span className="font-black text-white uppercase tracking-tight">

@@ -70,7 +70,8 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
       })
 
       if (!res.ok) {
-        throw new Error('Failed to log workout')
+        const { error } = await res.json().catch(() => ({}))
+        throw new Error(error || 'Failed to log workout')
       }
 
       setSuccess(true)
@@ -80,8 +81,8 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
       onLogged()
 
       setTimeout(() => setSuccess(false), 2500)
-    } catch {
-      setError('Failed to log workout. Please try again.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to log workout. Please try again.')
     } finally {
       setLoading(false)
     }
