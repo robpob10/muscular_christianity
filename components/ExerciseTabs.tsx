@@ -32,7 +32,7 @@ export default function ExerciseTabs({ exercises, activeExercise, onSelect, onAd
               className={`
                 whitespace-nowrap px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
                 ${isActive
-                  ? 'bg-coral-400 text-white shadow-lg shadow-coral-400/20'
+                  ? 'bg-leather-300 text-leather-900 shadow-lg shadow-leather-300/20'
                   : 'bg-leather-800 text-leather-400 hover:bg-leather-700 hover:text-leather-100 border border-leather-600'
                 }
               `}

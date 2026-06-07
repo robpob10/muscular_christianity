@@ -139,10 +139,9 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
             <button
               type="button"
               onClick={() => setPassed(true)}
+              style={passed ? { background: '#00d4c8', color: '#090909' } : {}}
               className={`flex-1 py-2 text-sm font-semibold transition-colors ${
-                passed
-                  ? 'bg-leather-300 text-leather-900'
-                  : 'bg-leather-700 text-leather-400 hover:text-leather-100'
+                passed ? '' : 'bg-leather-700 text-leather-400 hover:text-leather-100'
               }`}
             >
               ✓ Pass
@@ -175,7 +174,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-coral-400 hover:bg-coral-300 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm"
+          className="w-full bg-leather-300 hover:bg-leather-200 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm"
         >
           {loading ? 'Logging...' : 'Log Workout'}
         </button>

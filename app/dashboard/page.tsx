@@ -6,6 +6,13 @@ import ExerciseTabs from '@/components/ExerciseTabs'
 import WorkoutForm from '@/components/WorkoutForm'
 import ProgressChart from '@/components/ProgressChart'
 import AddExerciseModal from '@/components/AddExerciseModal'
+import RecentWorkouts from '@/components/RecentWorkouts'
+
+const PHRASES = [
+  'Our Father, full of grace, hallowed be his Gains',
+  'Let he without grip it be the first to rip it',
+  'King of the Juiced',
+]
 
 interface User {
   id: number
@@ -22,7 +29,8 @@ export default function DashboardPage() {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
-  const [refreshChart, setRefreshChart] = useState(0)
+  const [refreshKey, setRefreshKey] = useState(0)
+  const [phrase] = useState(() => PHRASES[Math.floor(Math.random() * PHRASES.length)])
   const router = useRouter()
 
   const fetchExercises = useCallback(async () => {
@@ -42,10 +50,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const stored = localStorage.getItem('gym_user')
-    if (!stored) {
-      router.push('/')
-      return
-    }
+    if (!stored) { router.push('/'); return }
     let parsed: User
     try {
       parsed = JSON.parse(stored) as User
@@ -56,27 +61,21 @@ export default function DashboardPage() {
     }
 
     fetch('/api/init')
-      .then(() =>
-        fetch('/api/users', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: parsed.name }),
-        })
-      )
-      .then((res) => res.json())
+      .then(() => fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: parsed.name }),
+      }))
+      .then(res => res.json())
       .then((freshUser: User) => {
         localStorage.setItem('gym_user', JSON.stringify(freshUser))
         setUser(freshUser)
       })
-      .catch(() => {
-        setUser(parsed)
-      })
+      .catch(() => setUser(parsed))
   }, [router])
 
   useEffect(() => {
-    if (user) {
-      fetchExercises()
-    }
+    if (user) fetchExercises()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
@@ -86,7 +85,7 @@ export default function DashboardPage() {
   }
 
   function handleWorkoutLogged() {
-    setRefreshChart((n) => n + 1)
+    setRefreshKey(n => n + 1)
     fetchExercises()
   }
 
@@ -106,22 +105,19 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-leather-900">
-      <header className="bg-leather-800 border-b border-leather-600 px-4 py-4">
+      {/* Header */}
+      <header className="bg-leather-800 border-b border-leather-600 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-coral-400 flex items-center justify-center">
-              <svg className="w-4 h-4 text-leather-800" viewBox="0 0 24 24" fill="currentColor">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-leather-300 flex items-center justify-center">
+              <svg className="w-3.5 h-3.5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="10.5" y="2" width="3" height="20" rx="1" />
                 <rect x="4" y="7" width="16" height="3" rx="1" />
               </svg>
             </div>
-            <span className="font-black text-leather-100 uppercase tracking-tight whitespace-nowrap text-sm">
-              Muscular Christianity
-            </span>
           </div>
-
           <div className="flex items-center gap-3">
-            <span className="text-coral-400 font-semibold text-sm">{user.name}</span>
+            <span className="text-leather-300 font-semibold text-sm">{user.name}</span>
             <button
               onClick={handleLogout}
               className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
@@ -132,11 +128,19 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-4 py-6">
+        {/* Catchphrase banner */}
+        <div className="mb-6 border border-leather-600 rounded px-4 py-3 bg-leather-800">
+          <p className="italic text-center font-medium" style={{ color: '#fbbf24' }}>
+            {phrase}
+          </p>
+        </div>
+
+        {/* Recent workouts feed */}
+        <RecentWorkouts refreshKey={refreshKey} />
+
         {exercises.length === 0 ? (
-          <div className="text-center text-leather-400 py-20">
-            Loading exercises...
-          </div>
+          <div className="text-center text-leather-400 py-20">Loading exercises...</div>
         ) : (
           <>
             <ExerciseTabs
@@ -155,7 +159,7 @@ export default function DashboardPage() {
                 />
                 <ProgressChart
                   exercise={activeExercise}
-                  refreshKey={refreshChart}
+                  refreshKey={refreshKey}
                 />
               </div>
             )}
