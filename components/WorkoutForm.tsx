@@ -2,64 +2,57 @@
 
 import { useState } from 'react'
 
-interface User {
-  id: number
-  name: string
-}
+interface User { id: number; name: string }
+interface Exercise { id: number; name: string }
+interface WorkoutFormProps { user: User; exercise: Exercise; onLogged: () => void }
 
-interface Exercise {
-  id: number
-  name: string
-}
+interface SetRow { weight: string; reps: string }
 
-interface WorkoutFormProps {
-  user: User
-  exercise: Exercise
-  onLogged: () => void
-}
+const EMPTY_ROWS: SetRow[] = Array.from({ length: 5 }, () => ({ weight: '', reps: '' }))
 
 export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormProps) {
-  const [weightKg, setWeightKg] = useState('')
-  const [reps, setReps] = useState('')
-  const [sets, setSets] = useState('')
+  const [rows, setRows] = useState<SetRow[]>(EMPTY_ROWS.map(r => ({ ...r })))
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
+  function updateRow(i: number, field: 'weight' | 'reps', value: string) {
+    setRows(prev => prev.map((r, idx) => idx === i ? { ...r, [field]: value } : r))
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-
-    const w = parseFloat(weightKg)
-    const r = parseInt(reps)
-    const s = parseInt(sets)
-
-    if (!weightKg || isNaN(w) || w <= 0) { setError('Enter a valid weight'); return }
-    if (!reps || isNaN(r) || r <= 0) { setError('Enter valid reps'); return }
-    if (!sets || isNaN(s) || s <= 0) { setError('Enter valid sets'); return }
+    const filled = rows.filter(r => r.weight && r.reps && parseFloat(r.weight) > 0 && parseInt(r.reps) > 0)
+    if (filled.length === 0) { setError('Fill in at least one set'); return }
 
     setLoading(true)
     setError('')
 
     try {
-      const res = await fetch('/api/workouts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, exerciseId: exercise.id, weightKg: w, reps: r, sets: s }),
-      })
-
-      if (!res.ok) {
-        const { error } = await res.json().catch(() => ({}))
-        throw new Error(error || 'Failed to log workout')
+      for (const row of filled) {
+        const res = await fetch('/api/workouts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.id,
+            exerciseId: exercise.id,
+            weightKg: parseFloat(row.weight),
+            reps: parseInt(row.reps),
+            sets: 1,
+          }),
+        })
+        if (!res.ok) {
+          const { error } = await res.json().catch(() => ({}))
+          throw new Error(error || 'Failed to log workout')
+        }
       }
 
       setSuccess(true)
-      setWeightKg('')
-      setReps('')
-      setSets('')
+      setRows(EMPTY_ROWS.map(r => ({ ...r })))
       onLogged()
       setTimeout(() => setSuccess(false), 2500)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to log workout. Please try again.')
+      setError(err instanceof Error ? err.message : 'Failed to log workout.')
     } finally {
       setLoading(false)
     }
@@ -67,49 +60,36 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
 
   return (
     <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-3 gap-3">
-          <div>
-            <label className="block text-xs font-medium text-leather-100 mb-1.5 uppercase tracking-wide">
-              Weight (kg)
-            </label>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        {/* Column headers */}
+        <div className="grid grid-cols-[2rem_1fr_1fr] gap-3">
+          <div />
+          <label className="text-xs font-medium text-leather-100 uppercase tracking-wide">Weight (kg)</label>
+          <label className="text-xs font-medium text-leather-100 uppercase tracking-wide">Reps</label>
+        </div>
+
+        {rows.map((row, i) => (
+          <div key={i} className="grid grid-cols-[2rem_1fr_1fr] gap-3 items-center">
+            <span className="text-xs text-leather-400 text-right">{i + 1}</span>
             <input
               type="number"
-              value={weightKg}
-              onChange={(e) => setWeightKg(e.target.value)}
-              placeholder="80"
+              value={row.weight}
+              onChange={e => updateRow(i, 'weight', e.target.value)}
+              placeholder="—"
               min="0"
               step="0.5"
-              className="w-full bg-leather-700 border border-leather-600 rounded-lg px-3 py-2.5 text-leather-100 placeholder-leather-400 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent text-sm transition"
+              className="bg-leather-700 border border-leather-600 rounded-lg px-3 py-2 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent text-sm transition"
             />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-leather-100 mb-1.5 uppercase tracking-wide">
-              Reps / Set
-            </label>
             <input
               type="number"
-              value={reps}
-              onChange={(e) => setReps(e.target.value)}
-              placeholder="10"
+              value={row.reps}
+              onChange={e => updateRow(i, 'reps', e.target.value)}
+              placeholder="—"
               min="1"
-              className="w-full bg-leather-700 border border-leather-600 rounded-lg px-3 py-2.5 text-leather-100 placeholder-leather-400 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent text-sm transition"
+              className="bg-leather-700 border border-leather-600 rounded-lg px-3 py-2 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent text-sm transition"
             />
           </div>
-          <div>
-            <label className="block text-xs font-medium text-leather-100 mb-1.5 uppercase tracking-wide">
-              Sets
-            </label>
-            <input
-              type="number"
-              value={sets}
-              onChange={(e) => setSets(e.target.value)}
-              placeholder="3"
-              min="1"
-              className="w-full bg-leather-700 border border-leather-600 rounded-lg px-3 py-2.5 text-leather-100 placeholder-leather-400 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent text-sm transition"
-            />
-          </div>
-        </div>
+        ))}
 
         {error && <p className="text-gym-red text-sm">{error}</p>}
 
