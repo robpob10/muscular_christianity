@@ -55,7 +55,6 @@ export default function DashboardPage() {
       return
     }
 
-    // Re-validate user against DB (handles stale IDs after DB resets)
     fetch('/api/init')
       .then(() =>
         fetch('/api/users', {
@@ -70,7 +69,6 @@ export default function DashboardPage() {
         setUser(freshUser)
       })
       .catch(() => {
-        // Fallback to stored value if network fails
         setUser(parsed)
       })
   }, [router])
@@ -89,53 +87,47 @@ export default function DashboardPage() {
 
   function handleWorkoutLogged() {
     setRefreshChart((n) => n + 1)
+    fetchExercises()
   }
 
   function handleExerciseAdded(exercise: Exercise) {
-    setExercises((prev) => {
-      // Re-fetch to get proper ordering; for now just append
-      const updated = [...prev, exercise]
-      return updated
-    })
     setActiveExercise(exercise)
     setShowAddModal(false)
-    // Refetch to get proper ordering
     fetchExercises()
   }
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <div className="text-gray-400">Loading...</div>
+      <div className="min-h-screen bg-leather-900 flex items-center justify-center">
+        <div className="text-leather-400">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950">
-      {/* Header */}
-      <header className="bg-zinc-900 border-b border-zinc-800 px-4 py-4">
+    <div className="min-h-screen bg-leather-900">
+      <header className="bg-leather-800 border-b border-leather-600 px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+            <div className="w-8 h-8 rounded-full bg-leather-300 flex items-center justify-center">
+              <svg className="w-4 h-4 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="10.5" y="2" width="3" height="20" rx="1" />
                 <rect x="4" y="7" width="16" height="3" rx="1" />
               </svg>
             </div>
-            <span className="font-black text-white uppercase tracking-tight">
+            <span className="font-black text-leather-100 uppercase tracking-tight">
               Muscular Christianity
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-gray-400 text-sm">
+            <span className="text-leather-400 text-sm">
               Welcome,{' '}
-              <span className="text-orange-400 font-semibold">{user.name}</span>
+              <span className="text-leather-300 font-semibold">{user.name}</span>
             </span>
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-500 hover:text-white border border-zinc-700 hover:border-zinc-500 rounded px-3 py-1.5 transition"
+              className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
             >
               Logout
             </button>
@@ -143,10 +135,9 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 py-8">
         {exercises.length === 0 ? (
-          <div className="text-center text-gray-500 py-20">
+          <div className="text-center text-leather-400 py-20">
             Loading exercises...
           </div>
         ) : (

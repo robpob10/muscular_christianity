@@ -19,12 +19,7 @@ function capitalize(str: string): string {
     .join(' ')
 }
 
-export default function ExerciseTabs({
-  exercises,
-  activeExercise,
-  onSelect,
-  onAddClick,
-}: ExerciseTabsProps) {
+export default function ExerciseTabs({ exercises, activeExercise, onSelect, onAddClick }: ExerciseTabsProps) {
   return (
     <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-hide">
       <div className="flex items-center gap-1 flex-nowrap">
@@ -36,10 +31,9 @@ export default function ExerciseTabs({
               onClick={() => onSelect(exercise)}
               className={`
                 whitespace-nowrap px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
-                ${
-                  isActive
-                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
-                    : 'bg-zinc-800 text-gray-400 hover:bg-zinc-700 hover:text-white border border-zinc-700'
+                ${isActive
+                  ? 'bg-leather-300 text-leather-900 shadow-lg shadow-leather-300/20'
+                  : 'bg-leather-800 text-leather-400 hover:bg-leather-700 hover:text-leather-100 border border-leather-600'
                 }
               `}
             >
@@ -50,7 +44,7 @@ export default function ExerciseTabs({
 
         <button
           onClick={onAddClick}
-          className="whitespace-nowrap px-3 py-2.5 rounded-lg text-sm font-bold transition-all duration-150 bg-zinc-800 text-gray-400 hover:bg-zinc-700 hover:text-orange-400 border border-zinc-700 border-dashed"
+          className="whitespace-nowrap px-3 py-2.5 rounded-lg text-sm font-bold transition-all duration-150 bg-leather-800 text-leather-400 hover:bg-leather-700 hover:text-leather-300 border border-leather-600 border-dashed"
           title="Add exercise"
         >
           +

@@ -54,12 +54,12 @@ export default function AddExerciseModal({ onClose, onAdded }: AddExerciseModalP
       className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 px-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 shadow-2xl w-full max-w-sm">
+      <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600 shadow-2xl w-full max-w-sm">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-white">Add Exercise</h2>
+          <h2 className="text-lg font-bold text-leather-100">Add Exercise</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-white transition"
+            className="text-leather-400 hover:text-leather-100 transition"
             aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@ export default function AddExerciseModal({ onClose, onAdded }: AddExerciseModalP
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-leather-400 mb-1.5 uppercase tracking-wide">
               Exercise Name
             </label>
             <input
@@ -78,7 +78,7 @@ export default function AddExerciseModal({ onClose, onAdded }: AddExerciseModalP
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Cable Rows"
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition text-sm"
+              className="w-full bg-leather-700 border border-leather-600 rounded-lg px-4 py-3 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition text-sm"
               autoFocus
             />
             {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
@@ -88,14 +88,14 @@ export default function AddExerciseModal({ onClose, onAdded }: AddExerciseModalP
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-semibold py-2.5 rounded-lg transition text-sm border border-zinc-700"
+              className="flex-1 bg-leather-700 hover:bg-leather-600 text-leather-300 font-semibold py-2.5 rounded-lg transition text-sm border border-leather-600"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-orange-500 hover:bg-orange-400 disabled:bg-orange-800 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg transition text-sm uppercase tracking-wide"
+              className="flex-1 bg-leather-300 hover:bg-leather-200 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-2.5 rounded-lg transition text-sm uppercase tracking-wide"
             >
               {loading ? 'Adding...' : 'Add'}
             </button>

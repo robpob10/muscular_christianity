@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
           wl.weight_kg,
           wl.reps,
           wl.sets,
+          wl.passed,
           wl.logged_at,
           u.id as user_id,
           u.name as user_name
@@ -42,6 +43,7 @@ export async function GET(request: NextRequest) {
           wl.weight_kg,
           wl.reps,
           wl.sets,
+          wl.passed,
           wl.logged_at,
           u.id as user_id,
           u.name as user_name
@@ -66,7 +68,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { userId, exerciseId, weightKg, reps, sets } = body
+    const { userId, exerciseId, weightKg, reps, sets, passed } = body
 
     if (!userId || !exerciseId || weightKg == null || !reps || !sets) {
       return NextResponse.json(
@@ -86,10 +88,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const didPass = passed !== false
+
     const { rows } = await sql`
-      INSERT INTO workout_logs (user_id, exercise_id, weight_kg, reps, sets)
-      VALUES (${userId}, ${exerciseId}, ${weightKg}, ${reps}, ${sets})
-      RETURNING id, user_id, exercise_id, weight_kg, reps, sets, logged_at
+      INSERT INTO workout_logs (user_id, exercise_id, weight_kg, reps, sets, passed)
+      VALUES (${userId}, ${exerciseId}, ${weightKg}, ${reps}, ${sets}, ${didPass})
+      RETURNING id, user_id, exercise_id, weight_kg, reps, sets, passed, logged_at
     `
 
     return NextResponse.json(rows[0], { status: 201 })

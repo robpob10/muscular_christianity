@@ -37,8 +37,14 @@ export async function GET() {
         weight_kg DECIMAL(6,2) NOT NULL,
         reps INTEGER NOT NULL,
         sets INTEGER NOT NULL,
+        passed BOOLEAN NOT NULL DEFAULT TRUE,
         logged_at TIMESTAMPTZ DEFAULT NOW()
       )
+    `
+
+    // Migrate: add passed column to existing tables that predate this field
+    await sql`
+      ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS passed BOOLEAN NOT NULL DEFAULT TRUE
     `
 
     // Seed default exercises if table is empty

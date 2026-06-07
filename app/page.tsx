@@ -56,38 +56,27 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-leather-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Logo / Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-orange-500 mb-6">
-            <svg
-              className="w-10 h-10 text-white"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              {/* vertical bar */}
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-leather-300 mb-6 shadow-lg shadow-leather-300/20">
+            <svg className="w-10 h-10 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
               <rect x="10.5" y="2" width="3" height="20" rx="1" />
-              {/* horizontal bar */}
               <rect x="4" y="7" width="16" height="3" rx="1" />
             </svg>
           </div>
-          <h1 className="text-4xl font-black text-white tracking-tight uppercase">
+          <h1 className="text-4xl font-black text-leather-100 tracking-tight uppercase">
             Muscular Christianity
           </h1>
-          <p className="text-gray-400 mt-2 text-lg">Track your gains</p>
+          <p className="text-leather-400 mt-2 text-lg">Track your gains</p>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 shadow-2xl">
-          <h2 className="text-xl font-bold text-white mb-6">Enter the Gym</h2>
+        <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
+          <h2 className="text-xl font-bold text-leather-100 mb-6">Enter the Gym</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-400 mb-2"
-              >
+              <label htmlFor="name" className="block text-sm font-medium text-leather-400 mb-2">
                 Your Name
               </label>
               <input
@@ -96,18 +85,16 @@ export default function LoginPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. John"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                className="w-full bg-leather-700 border border-leather-600 rounded-lg px-4 py-3 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition"
                 autoFocus
               />
-              {error && (
-                <p className="mt-2 text-sm text-red-400">{error}</p>
-              )}
+              {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-orange-500 hover:bg-orange-400 disabled:bg-orange-800 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
+              className="w-full bg-leather-300 hover:bg-leather-200 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
             >
               {loading ? 'Loading...' : 'Enter the Gym'}
             </button>
