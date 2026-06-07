@@ -58,7 +58,7 @@ interface TooltipPayloadEntry {
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipPayloadEntry[]; label?: string }) {
   if (!active || !payload?.length) return null
   return (
-    <div style={{ background: '#383c56', border: '1px solid #484d6e', borderRadius: 6, padding: '10px 14px', fontSize: 13 }}>
+    <div style={{ background: '#2f3349', border: '1px solid #484d6e', borderRadius: 6, padding: '10px 14px', fontSize: 13 }}>
       <p style={{ color: '#6d728a', marginBottom: 6 }}>{label}</p>
       {payload.map((entry) => (
         <div key={entry.name} style={{ color: entry.color, marginBottom: 3 }}>

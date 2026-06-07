@@ -16,7 +16,7 @@ module.exports = {
           500: '#5a6080',
           600: '#484d6e', // border
           700: '#2d3148', // input / elevated surface
-          800: '#383c56', // card / tab surface (mid blue-grey)
+          800: '#2f3349', // card / tab surface (mid blue-grey)
           900: '#191c2d', // page background (dark navy)
         },
         gym: {
