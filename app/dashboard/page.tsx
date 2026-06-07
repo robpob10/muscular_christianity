@@ -106,7 +106,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-leather-900">
       {/* Header */}
-      <header className="bg-leather-800 border-b border-leather-600 px-4 py-3">
+      <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-leather-300 flex items-center justify-center">
@@ -130,7 +130,7 @@ export default function DashboardPage() {
 
       <main className="max-w-5xl mx-auto px-4 py-6">
         {/* Catchphrase banner */}
-        <div className="mb-6 border border-leather-600 rounded px-4 py-3 bg-leather-800">
+        <div className="mb-6 rounded-lg px-4 py-3 bg-leather-800">
           <p className="italic text-center font-medium" style={{ color: '#fbbf24' }}>
             {phrase}
           </p>

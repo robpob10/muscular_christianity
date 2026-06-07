@@ -9,7 +9,7 @@ module.exports = {
       colors: {
         leather: {
           50:  '#c4c8d8',
-          100: '#9499ab', // primary text (cool silver-grey)
+          100: '#d0d4e4', // primary text (whiter)
           200: '#5eead4', // teal light (hover)
           300: '#00d4c8', // teal green accent
           400: '#6d728a', // muted text

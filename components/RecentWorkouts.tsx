@@ -52,9 +52,6 @@ export default function RecentWorkouts({ refreshKey }: { refreshKey: number }) {
           <span style={{ color: '#00d4c8' }} className="font-semibold w-20 shrink-0">{log.user_name}</span>
           <span className="text-leather-100 w-20 shrink-0 text-right">{parseFloat(log.weight_kg)} kg</span>
           <span className="text-leather-400 w-14 shrink-0 text-right">{log.sets}×{log.reps}</span>
-          <span className={`w-4 shrink-0 text-right ${log.passed ? 'text-[#00d4c8]' : 'text-gym-red'}`}>
-            {log.passed ? '✓' : '✗'}
-          </span>
         </div>
       ))}
     </div>
