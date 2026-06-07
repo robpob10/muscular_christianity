@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
       FROM workout_logs wl
       JOIN users     u ON u.id = wl.user_id
       JOIN exercises e ON e.id = wl.exercise_id
+      WHERE wl.deleted = FALSE
       ORDER BY wl.logged_at DESC
       LIMIT ${limit}
     `

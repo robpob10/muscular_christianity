@@ -42,10 +42,9 @@ export async function GET() {
       )
     `
 
-    // Migrate: add passed column to existing tables that predate this field
-    await sql`
-      ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS passed BOOLEAN NOT NULL DEFAULT TRUE
-    `
+    // Migrations for columns added after initial deploy
+    await sql`ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS passed BOOLEAN NOT NULL DEFAULT TRUE`
+    await sql`ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS deleted BOOLEAN NOT NULL DEFAULT FALSE`
 
     // Seed default exercises if table is empty
     const { rowCount } = await sql`SELECT id FROM exercises LIMIT 1`

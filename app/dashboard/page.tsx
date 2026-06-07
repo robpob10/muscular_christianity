@@ -158,6 +158,7 @@ export default function DashboardPage() {
                 <ProgressChart
                   exercise={activeExercise}
                   refreshKey={refreshKey}
+                  currentUser={user}
                 />
               </div>
             )}
