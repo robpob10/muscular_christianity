@@ -18,12 +18,6 @@ interface WorkoutFormProps {
   onLogged: () => void
 }
 
-function capitalize(str: string): string {
-  return str
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
 
 export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormProps) {
   const [weightKg, setWeightKg] = useState('')
@@ -90,14 +84,6 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
 
   return (
     <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-      <h2 className="text-lg font-bold text-white mb-1">
-        Log {capitalize(exercise.name)}
-      </h2>
-      <p className="text-gray-500 text-sm mb-5">
-        Logging as{' '}
-        <span className="text-orange-400 font-medium">{user.name}</span>
-      </p>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-3 gap-3">
           <div>
