@@ -8,16 +8,16 @@ module.exports = {
     extend: {
       colors: {
         leather: {
-          50:  '#fdf3e3',
-          100: '#f5e6d0',
-          200: '#d4b87a',
-          300: '#c8a46e',
-          400: '#9a7550',
-          500: '#6b4a28',
-          600: '#4a2e14',
-          700: '#291608',
-          800: '#1e1108',
-          900: '#130a03',
+          50:  '#f4faf7',
+          100: '#f0ece2', // warm cream (pool-side stone walls)
+          200: '#6ee7b7', // light emerald
+          300: '#34d399', // glowing emerald accent (pool surface highlights)
+          400: '#6db38a', // muted sage text
+          500: '#2d7a52', // medium forest green
+          600: '#1e4a36', // border green
+          700: '#132b22', // input background
+          800: '#0d201a', // card surface
+          900: '#070e09', // page background (near-black green)
         },
       },
     },
