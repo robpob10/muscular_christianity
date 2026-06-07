@@ -175,7 +175,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-leather-300 hover:bg-leather-200 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm"
+          className="w-full bg-coral-400 hover:bg-coral-300 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm"
         >
           {loading ? 'Logging...' : 'Log Workout'}
         </button>

@@ -109,8 +109,8 @@ export default function DashboardPage() {
       <header className="bg-leather-800 border-b border-leather-600 px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-leather-300 flex items-center justify-center">
-              <svg className="w-4 h-4 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
+            <div className="w-8 h-8 rounded-full bg-coral-400 flex items-center justify-center">
+              <svg className="w-4 h-4 text-leather-800" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="10.5" y="2" width="3" height="20" rx="1" />
                 <rect x="4" y="7" width="16" height="3" rx="1" />
               </svg>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <span className="text-leather-400 text-sm">
               Welcome,{' '}
-              <span className="text-leather-300 font-semibold">{user.name}</span>
+              <span className="text-coral-400 font-semibold">{user.name}</span>
             </span>
             <button
               onClick={handleLogout}

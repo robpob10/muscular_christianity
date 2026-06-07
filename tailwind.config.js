@@ -7,6 +7,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        coral: {
+          300: '#f4a08a',
+          400: '#e07055',
+          500: '#c4573e',
+        },
         leather: {
           50:  '#f4faf7',
           100: '#f0ece2', // warm cream (pool-side stone walls)

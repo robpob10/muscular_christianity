@@ -95,7 +95,7 @@ export default function AddExerciseModal({ onClose, onAdded }: AddExerciseModalP
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-leather-300 hover:bg-leather-200 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-2.5 rounded-lg transition text-sm uppercase tracking-wide"
+              className="flex-1 bg-coral-400 hover:bg-coral-300 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2.5 rounded-lg transition text-sm uppercase tracking-wide"
             >
               {loading ? 'Adding...' : 'Add'}
             </button>
