@@ -9,7 +9,7 @@ import AddExerciseModal from '@/components/AddExerciseModal'
 import RecentWorkouts from '@/components/RecentWorkouts'
 
 const PHRASES = [
-  'Our Father full of grace hallowed be his Gains',
+  'Our Father, full of grace,\nhallowed be his gains',
   'Let he without grip it be the first to rip it',
   'King of the Juiced',
 ]
@@ -129,7 +129,7 @@ export default function DashboardPage() {
       <main className="max-w-5xl mx-auto px-4 py-6">
         {/* Catchphrase banner */}
         <div className="mb-6 rounded-lg px-6 py-4 bg-leather-800">
-          <p className="italic text-center font-medium text-base" style={{ color: '#fbbf24' }}>
+          <p className="italic text-center font-medium text-base whitespace-pre-line" style={{ color: '#fbbf24' }}>
             {phrase}
           </p>
         </div>
