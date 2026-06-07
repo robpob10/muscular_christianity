@@ -108,16 +108,14 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-leather-300 flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="10.5" y="2" width="3" height="20" rx="1" />
-                <rect x="4" y="7" width="16" height="3" rx="1" />
-              </svg>
-            </div>
+          <div className="w-7 h-7 rounded-full bg-leather-300 flex items-center justify-center">
+            <svg className="w-3.5 h-3.5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="10.5" y="2" width="3" height="20" rx="1" />
+              <rect x="4" y="7" width="16" height="3" rx="1" />
+            </svg>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-leather-300 font-semibold text-sm">{user.name}</span>
+            <span className="text-gym-red font-semibold text-sm">{user.name}</span>
             <button
               onClick={handleLogout}
               className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
