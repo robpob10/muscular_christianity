@@ -115,16 +115,13 @@ export default function DashboardPage() {
                 <rect x="4" y="7" width="16" height="3" rx="1" />
               </svg>
             </div>
-            <span className="font-black text-leather-100 uppercase tracking-tight">
+            <span className="font-black text-leather-100 uppercase tracking-tight whitespace-nowrap text-sm">
               Muscular Christianity
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-leather-400 text-sm">
-              Welcome,{' '}
-              <span className="text-coral-400 font-semibold">{user.name}</span>
-            </span>
+            <span className="text-coral-400 font-semibold text-sm">{user.name}</span>
             <button
               onClick={handleLogout}
               className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
