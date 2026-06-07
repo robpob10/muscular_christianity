@@ -59,7 +59,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-leather-900">
-      {/* Header — matches dashboard */}
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto">
           <div className="w-7 h-7 rounded-full bg-gym-red flex items-center justify-center">
@@ -72,32 +71,23 @@ export default function LoginPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        {/* Catchphrase banner — matches dashboard */}
         <div className="mb-6 rounded-lg px-6 py-4 bg-leather-800">
           <p className="italic text-center font-medium text-base whitespace-pre-line" style={{ color: '#fbbf24' }}>
             {phrase}
           </p>
         </div>
 
-        {/* Login card */}
         <div className="max-w-sm mx-auto bg-leather-800 rounded-2xl p-6 border border-leather-600">
           <form onSubmit={handleSubmit} className="space-y-3">
-            <div>
-              <label htmlFor="name" className="block text-xs font-medium text-leather-100 uppercase tracking-wide mb-1.5">
-                Your Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="e.g. George Williams"
-                className="w-full bg-leather-700 border border-leather-600 rounded-lg px-3 py-2.5 text-leather-100 placeholder-leather-400 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition text-sm"
-                autoFocus
-              />
-              {error && <p className="mt-2 text-xs text-gym-red">{error}</p>}
-            </div>
-
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="e.g. George Williams"
+              className="w-full bg-leather-700 border border-leather-600 rounded-lg px-3 py-2.5 text-leather-100 placeholder-leather-400 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition text-sm"
+              autoFocus
+            />
+            {error && <p className="text-xs text-gym-red">{error}</p>}
             <button
               type="submit"
               disabled={loading}
