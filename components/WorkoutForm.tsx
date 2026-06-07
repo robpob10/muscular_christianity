@@ -70,7 +70,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-medium text-leather-400 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-leather-100 mb-1.5 uppercase tracking-wide">
               Weight (kg)
             </label>
             <input
@@ -84,7 +84,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-leather-400 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-leather-100 mb-1.5 uppercase tracking-wide">
               Reps / Set
             </label>
             <input
@@ -97,7 +97,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-leather-400 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-leather-100 mb-1.5 uppercase tracking-wide">
               Sets
             </label>
             <input
