@@ -10,10 +10,6 @@ export default function LoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Initialize the database tables on first load
-    fetch('/api/init').catch(() => {})
-
-    // If already logged in, redirect to dashboard
     const user = localStorage.getItem('gym_user')
     if (user) {
       router.push('/dashboard')
@@ -32,6 +28,9 @@ export default function LoginPage() {
     setError('')
 
     try {
+      // Ensure DB is initialised before creating the user
+      await fetch('/api/init')
+
       const res = await fetch('/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -60,16 +59,13 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-orange-500 mb-6">
             <svg
               className="w-10 h-10 text-white"
-              fill="none"
-              stroke="currentColor"
               viewBox="0 0 24 24"
+              fill="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-              />
+              {/* vertical bar */}
+              <rect x="10.5" y="2" width="3" height="20" rx="1" />
+              {/* horizontal bar */}
+              <rect x="4" y="7" width="16" height="3" rx="1" />
             </svg>
           </div>
           <h1 className="text-4xl font-black text-white tracking-tight uppercase">
