@@ -129,7 +129,7 @@ export default function DashboardPage() {
       <main className="max-w-5xl mx-auto px-4 py-6">
         {/* Catchphrase banner */}
         <div className="mb-6 rounded-lg px-4 py-3 bg-leather-800">
-          <p className="italic text-center font-medium" style={{ color: '#fbbf24' }}>
+          <p className="italic text-center font-medium text-sm whitespace-nowrap overflow-hidden text-ellipsis" style={{ color: '#fbbf24' }}>
             {phrase}
           </p>
         </div>
