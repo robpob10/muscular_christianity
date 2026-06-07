@@ -28,13 +28,10 @@ export default function RecentWorkouts({ refreshKey }: { refreshKey: number }) {
   if (logs.length === 0) return null
 
   return (
-    <div className="mb-6 flex flex-col items-center gap-1">
+    <div className="mb-6 space-y-1 text-center">
       {logs.map(log => (
-        <div key={log.id} className="flex gap-8 text-sm font-mono text-leather-400">
-          <span className="w-28 truncate">{log.user_name}</span>
-          <span className="w-44 truncate">{capitalize(log.exercise_name)}</span>
-          <span className="w-16 text-right">{parseFloat(log.weight_kg)} kg</span>
-          <span className="w-10 text-right">{log.sets}×{log.reps}</span>
+        <div key={log.id} className="text-sm font-mono text-leather-400">
+          {log.user_name} – {capitalize(log.exercise_name)}{'  '}{parseFloat(log.weight_kg)} kg{'  '}{log.sets}×{log.reps}
         </div>
       ))}
     </div>
