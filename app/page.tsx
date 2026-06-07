@@ -72,7 +72,7 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
-          <h2 className="text-xl font-bold text-leather-100 mb-6">Enter the Gym</h2>
+          <h2 className="text-xl font-bold text-leather-100 mb-6">Enter the Gymdom of Heaven</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -96,7 +96,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
             >
-              {loading ? 'Loading...' : 'Enter the Gym'}
+              {loading ? 'Loading...' : 'Enter the Gymdom of Heaven'}
             </button>
           </form>
         </div>
