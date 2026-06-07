@@ -59,8 +59,8 @@ interface TooltipPayloadEntry {
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipPayloadEntry[]; label?: string }) {
   if (!active || !payload?.length) return null
   return (
-    <div style={{ background: '#111111', border: '1px solid #2a2a2a', borderRadius: 6, padding: '10px 14px', fontSize: 13 }}>
-      <p style={{ color: '#666666', marginBottom: 6 }}>{label}</p>
+    <div style={{ background: '#383c56', border: '1px solid #484d6e', borderRadius: 6, padding: '10px 14px', fontSize: 13 }}>
+      <p style={{ color: '#6d728a', marginBottom: 6 }}>{label}</p>
       {payload.map((entry) => {
         const didPass = entry.payload[`${entry.name}__passed`] !== false
         return (
@@ -68,7 +68,7 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
             <span style={{ fontWeight: 600 }}>{entry.name}</span>
             {': '}
             <span>{entry.value} kg</span>
-            <span style={{ color: '#666666', marginLeft: 6 }}>
+            <span style={{ color: '#6d728a', marginLeft: 6 }}>
               {entry.payload[`${entry.name}__sets`]} × {entry.payload[`${entry.name}__reps`]} reps
             </span>
             <span style={{ marginLeft: 6, color: didPass ? '#22c55e' : '#ef4444', fontSize: 11 }}>
@@ -163,16 +163,16 @@ export default function ProgressChart({ exercise, refreshKey }: ProgressChartPro
       ) : (
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={chartData} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
             <XAxis
               dataKey="date"
-              tick={{ fill: '#666666', fontSize: 11 }}
-              axisLine={{ stroke: '#2a2a2a' }}
+              tick={{ fill: '#6d728a', fontSize: 11 }}
+              axisLine={{ stroke: '#484d6e' }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: '#666666', fontSize: 11 }}
-              axisLine={{ stroke: '#2a2a2a' }}
+              tick={{ fill: '#6d728a', fontSize: 11 }}
+              axisLine={{ stroke: '#484d6e' }}
               tickLine={false}
               unit=" kg"
             />
