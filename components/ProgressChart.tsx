@@ -48,6 +48,32 @@ function formatDate(iso: string): string {
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
+interface TooltipPayloadEntry {
+  name: string
+  value: number
+  color: string
+  payload: Record<string, number | string>
+}
+
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipPayloadEntry[]; label?: string }) {
+  if (!active || !payload?.length) return null
+  return (
+    <div style={{ background: '#18181b', border: '1px solid #3f3f46', borderRadius: 8, padding: '10px 14px', fontSize: 13 }}>
+      <p style={{ color: '#a1a1aa', marginBottom: 6 }}>{label}</p>
+      {payload.map((entry) => (
+        <div key={entry.name} style={{ color: entry.color, marginBottom: 3 }}>
+          <span style={{ fontWeight: 600 }}>{entry.name}</span>
+          {': '}
+          <span>{entry.value} kg</span>
+          <span style={{ color: '#71717a', marginLeft: 6 }}>
+            {entry.payload[`${entry.name}__sets`]} × {entry.payload[`${entry.name}__reps`]} reps
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function ProgressChart({ exercise, refreshKey }: ProgressChartProps) {
   const [chartData, setChartData] = useState<Record<string, number | string>[]>([])
   const [userNames, setUserNames] = useState<string[]>([])
@@ -70,21 +96,27 @@ export default function ProgressChart({ exercise, refreshKey }: ProgressChartPro
         const users = Array.from(usersSet)
         setUserNames(users)
 
-        // Group by date, per user take max weight that day
-        const byDate: Record<string, Record<string, number>> = {}
+        // Group by date; per user keep the entry with the highest weight that day
+        const byDate: Record<string, Record<string, { weight: number; reps: number; sets: number }>> = {}
         logs.forEach((l) => {
           const date = formatDate(l.logged_at)
           if (!byDate[date]) byDate[date] = {}
           const w = parseFloat(l.weight_kg)
-          if (!byDate[date][l.user_name] || w > byDate[date][l.user_name]) {
-            byDate[date][l.user_name] = w
+          const prev = byDate[date][l.user_name]
+          if (!prev || w > prev.weight) {
+            byDate[date][l.user_name] = { weight: w, reps: l.reps, sets: l.sets }
           }
         })
 
-        const points = Object.entries(byDate).map(([date, userWeights]) => ({
-          date,
-          ...userWeights,
-        }))
+        const points = Object.entries(byDate).map(([date, userEntries]) => {
+          const point: Record<string, number | string> = { date }
+          Object.entries(userEntries).forEach(([userName, { weight, reps, sets }]) => {
+            point[userName] = weight
+            point[`${userName}__reps`] = reps
+            point[`${userName}__sets`] = sets
+          })
+          return point
+        })
 
         setChartData(points)
       })
@@ -128,16 +160,7 @@ export default function ProgressChart({ exercise, refreshKey }: ProgressChartPro
               tickLine={false}
               unit=" kg"
             />
-            <Tooltip
-              contentStyle={{
-                background: '#18181b',
-                border: '1px solid #3f3f46',
-                borderRadius: '8px',
-                color: '#fff',
-                fontSize: 12,
-              }}
-              formatter={(value: number, name: string) => [`${value} kg`, name]}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Legend
               wrapperStyle={{ fontSize: 12, color: '#a1a1aa' }}
             />
