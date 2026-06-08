@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 
 interface User { id: number; name: string }
@@ -23,6 +24,7 @@ function formatDate(iso: string) {
 }
 
 export default function HistoryPage() {
+  const { status } = useSession()
   const [user, setUser] = useState<User | null>(null)
   const [groups, setGroups] = useState<SessionGroup[]>([])
   const [loading, setLoading] = useState(true)
@@ -30,31 +32,20 @@ export default function HistoryPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const stored = localStorage.getItem('gym_user')
-    if (!stored) { router.push('/'); return }
-    let parsed: User & { sessionToken?: string }
-    try {
-      parsed = JSON.parse(stored)
-    } catch {
-      router.push('/'); return
-    }
-    if (!parsed.sessionToken) { router.push('/'); return }
-    const token = parsed.sessionToken
-    fetch('/api/auth/session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token }),
-    })
-      .then(res => { if (!res.ok) throw new Error(); return res.json() })
-      .then((u: User) => {
+    if (status === 'unauthenticated') { router.push('/'); return }
+    if (status !== 'authenticated') return
+    fetch('/api/me')
+      .then(res => res.json())
+      .then((u: User | null) => {
+        if (!u) { router.push('/setup'); return }
         setUser(u)
         return fetch(`/api/history?userId=${u.id}`)
       })
-      .then(r => r!.json())
-      .then(data => Array.isArray(data) && setGroups(data))
-      .catch(() => { localStorage.removeItem('gym_user'); router.push('/') })
+      .then(r => r?.json())
+      .then(data => data && Array.isArray(data) && setGroups(data))
+      .catch(() => router.push('/'))
       .finally(() => setLoading(false))
-  }, [router])
+  }, [status, router])
 
   async function handleDelete(group: SessionGroup) {
     if (!user) return

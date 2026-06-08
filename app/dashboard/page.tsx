@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import ExerciseTabs from '@/components/ExerciseTabs'
 import WorkoutForm from '@/components/WorkoutForm'
@@ -9,18 +10,11 @@ import ProgressChart from '@/components/ProgressChart'
 import AddExerciseModal from '@/components/AddExerciseModal'
 import RecentWorkouts from '@/components/RecentWorkouts'
 
-
-interface User {
-  id: number
-  name: string
-}
-
-interface Exercise {
-  id: number
-  name: string
-}
+interface User { id: number; name: string }
+interface Exercise { id: number; name: string }
 
 export default function DashboardPage() {
+  const { data: session, status } = useSession()
   const [user, setUser] = useState<User | null>(null)
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
@@ -34,51 +28,29 @@ export default function DashboardPage() {
       if (res.ok) {
         const data = await res.json()
         setExercises(data)
-        if (data.length > 0 && !activeExercise) {
-          setActiveExercise(data[0])
-        }
+        if (data.length > 0 && !activeExercise) setActiveExercise(data[0])
       }
-    } catch {
-      // ignore
-    }
+    } catch { /* ignore */ }
   }, [activeExercise])
 
   useEffect(() => {
-    const stored = localStorage.getItem('gym_user')
-    if (!stored) { router.push('/'); return }
-    let parsed: User & { sessionToken?: string }
-    try {
-      parsed = JSON.parse(stored)
-    } catch {
-      localStorage.removeItem('gym_user'); router.push('/'); return
-    }
-    if (!parsed.sessionToken) {
-      localStorage.removeItem('gym_user'); router.push('/'); return
-    }
-    const token = parsed.sessionToken
+    if (status === 'unauthenticated') { router.push('/'); return }
+    if (status !== 'authenticated') return
+
     fetch('/api/init')
-      .then(() => fetch('/api/auth/session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token }),
-      }))
-      .then(res => { if (!res.ok) throw new Error(); return res.json() })
-      .then((freshUser: User) => {
-        localStorage.setItem('gym_user', JSON.stringify({ ...freshUser, sessionToken: token }))
-        setUser(freshUser)
+      .then(() => fetch('/api/me'))
+      .then(res => res.json())
+      .then((gymUser: User | null) => {
+        if (!gymUser) { router.push('/setup'); return }
+        setUser(gymUser)
       })
-      .catch(() => { localStorage.removeItem('gym_user'); router.push('/') })
-  }, [router])
+      .catch(() => router.push('/'))
+  }, [status, router])
 
   useEffect(() => {
     if (user) fetchExercises()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
-
-  function handleLogout() {
-    localStorage.removeItem('gym_user')
-    router.push('/')
-  }
 
   function handleWorkoutLogged() {
     setRefreshKey(n => n + 1)
@@ -91,17 +63,16 @@ export default function DashboardPage() {
     fetchExercises()
   }
 
-  if (!user) {
+  if (status === 'loading' || !user) {
     return (
       <div className="min-h-screen bg-leather-900 flex items-center justify-center">
-        <div className="text-leather-400">Loading...</div>
+        <div className="w-6 h-6 border-2 border-leather-300 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-leather-900">
-      {/* Header */}
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="w-7 h-7 rounded-full bg-gym-yellow flex items-center justify-center">
@@ -113,7 +84,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <Link href="/history" className="text-gym-red font-semibold text-sm hover:opacity-80 transition">{user.name}</Link>
             <button
-              onClick={handleLogout}
+              onClick={() => signOut({ callbackUrl: '/' })}
               className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
             >
               Logout
@@ -123,7 +94,6 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        {/* Recent workouts feed */}
         <RecentWorkouts refreshKey={refreshKey} />
 
         {exercises.length === 0 ? (
@@ -136,19 +106,10 @@ export default function DashboardPage() {
               onSelect={setActiveExercise}
               onAddClick={() => setShowAddModal(true)}
             />
-
             {activeExercise && (
               <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <WorkoutForm
-                  user={user}
-                  exercise={activeExercise}
-                  onLogged={handleWorkoutLogged}
-                />
-                <ProgressChart
-                  exercise={activeExercise}
-                  refreshKey={refreshKey}
-                  currentUser={user}
-                />
+                <WorkoutForm user={user} exercise={activeExercise} onLogged={handleWorkoutLogged} />
+                <ProgressChart exercise={activeExercise} refreshKey={refreshKey} currentUser={user} />
               </div>
             )}
           </>
@@ -156,10 +117,7 @@ export default function DashboardPage() {
       </main>
 
       {showAddModal && (
-        <AddExerciseModal
-          onClose={() => setShowAddModal(false)}
-          onAdded={handleExerciseAdded}
-        />
+        <AddExerciseModal onClose={() => setShowAddModal(false)} onAdded={handleExerciseAdded} />
       )}
     </div>
   )
