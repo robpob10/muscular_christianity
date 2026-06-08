@@ -104,7 +104,10 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
           setChartData([]); setUserNames([]); return
         }
 
-        const bw = logs.every(l => parseFloat(l.weight_kg) === 0)
+        const mostRecentDate = formatDate(logs[logs.length - 1].logged_at)
+        const bw = logs
+          .filter(l => formatDate(l.logged_at) === mostRecentDate)
+          .every(l => parseFloat(l.weight_kg) === 0)
         setIsBodyweight(bw)
 
         const usersSet = new Set<string>()
