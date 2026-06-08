@@ -72,7 +72,7 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
-          <p className="text-center italic font-medium text-gym-yellow whitespace-pre-line mb-6">
+          <p className="text-center italic font-medium text-gym-wood whitespace-pre-line mb-6">
             {"Our Father\nFull of grace\nHallowed be his gains"}
           </p>
 
@@ -96,7 +96,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
+              className="w-full bg-gym-wood hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
             >
               {loading ? 'Loading...' : 'Enter the Gymdom of Heaven'}
             </button>
