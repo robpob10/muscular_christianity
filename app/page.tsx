@@ -59,7 +59,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-leather-900 flex items-start justify-center px-4 pt-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gym-wood mb-6 shadow-lg">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gym-yellow mb-6 shadow-lg">
             <svg className="w-10 h-10 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
               <rect x="10.5" y="2" width="3" height="20" rx="1" />
               <rect x="4" y="7" width="16" height="3" rx="1" />
@@ -72,7 +72,7 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
-          <p className="text-center italic font-medium text-gym-wood whitespace-pre-line mb-6">
+          <p className="text-center italic font-medium text-gym-yellow whitespace-pre-line mb-6">
             {"Our Father\nFull of grace\nHallowed be his gains"}
           </p>
 
@@ -96,7 +96,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gym-wood hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
+              className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
             >
               {loading ? 'Loading...' : 'Enter the Gymdom of Heaven'}
             </button>

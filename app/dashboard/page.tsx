@@ -103,7 +103,7 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="w-7 h-7 rounded-full bg-gym-wood flex items-center justify-center">
+          <div className="w-7 h-7 rounded-full bg-gym-yellow flex items-center justify-center">
             <svg className="w-3.5 h-3.5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
               <rect x="10.5" y="2" width="3" height="20" rx="1" />
               <rect x="4" y="7" width="16" height="3" rx="1" />
