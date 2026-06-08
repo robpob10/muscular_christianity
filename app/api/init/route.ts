@@ -53,6 +53,20 @@ export async function GET() {
     await sql`DELETE FROM users WHERE email IS NULL`
 
     await sql`
+      CREATE TABLE IF NOT EXISTS feed_reactions (
+        id SERIAL PRIMARY KEY,
+        reactor_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        target_user_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        workout_date DATE NOT NULL,
+        stars INTEGER NOT NULL CHECK (stars >= 1 AND stars <= 5),
+        comment TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        UNIQUE(reactor_user_id, target_user_id, exercise_id, workout_date)
+      )
+    `
+
+    await sql`
       CREATE TABLE IF NOT EXISTS magic_links (
         id SERIAL PRIMARY KEY,
         email TEXT NOT NULL,
