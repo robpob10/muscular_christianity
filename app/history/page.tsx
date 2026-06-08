@@ -32,17 +32,28 @@ export default function HistoryPage() {
   useEffect(() => {
     const stored = localStorage.getItem('gym_user')
     if (!stored) { router.push('/'); return }
+    let parsed: User & { sessionToken?: string }
     try {
-      const u = JSON.parse(stored) as User
-      setUser(u)
-      fetch(`/api/history?userId=${u.id}`)
-        .then(r => r.json())
-        .then(data => Array.isArray(data) && setGroups(data))
-        .catch(() => {})
-        .finally(() => setLoading(false))
+      parsed = JSON.parse(stored)
     } catch {
-      router.push('/')
+      router.push('/'); return
     }
+    if (!parsed.sessionToken) { router.push('/'); return }
+    const token = parsed.sessionToken
+    fetch('/api/auth/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
+      .then(res => { if (!res.ok) throw new Error(); return res.json() })
+      .then((u: User) => {
+        setUser(u)
+        return fetch(`/api/history?userId=${u.id}`)
+      })
+      .then(r => r!.json())
+      .then(data => Array.isArray(data) && setGroups(data))
+      .catch(() => { localStorage.removeItem('gym_user'); router.push('/') })
+      .finally(() => setLoading(false))
   }, [router])
 
   async function handleDelete(group: SessionGroup) {

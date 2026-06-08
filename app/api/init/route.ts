@@ -45,6 +45,29 @@ export async function GET() {
     // Migrations for columns added after initial deploy
     await sql`ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS passed BOOLEAN NOT NULL DEFAULT TRUE`
     await sql`ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS deleted BOOLEAN NOT NULL DEFAULT FALSE`
+    await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT`
+    await sql`CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique ON users (email) WHERE email IS NOT NULL`
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS magic_links (
+        id SERIAL PRIMARY KEY,
+        email TEXT NOT NULL,
+        token TEXT NOT NULL UNIQUE,
+        expires_at TIMESTAMPTZ NOT NULL,
+        used BOOLEAN NOT NULL DEFAULT FALSE,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `
+
+    await sql`
+      CREATE TABLE IF NOT EXISTS sessions (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        token TEXT NOT NULL UNIQUE,
+        expires_at TIMESTAMPTZ NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `
 
     // Seed default exercises if table is empty
     const { rowCount } = await sql`SELECT id FROM exercises LIMIT 1`

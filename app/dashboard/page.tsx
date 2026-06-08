@@ -46,27 +46,28 @@ export default function DashboardPage() {
   useEffect(() => {
     const stored = localStorage.getItem('gym_user')
     if (!stored) { router.push('/'); return }
-    let parsed: User
+    let parsed: User & { sessionToken?: string }
     try {
-      parsed = JSON.parse(stored) as User
+      parsed = JSON.parse(stored)
     } catch {
-      localStorage.removeItem('gym_user')
-      router.push('/')
-      return
+      localStorage.removeItem('gym_user'); router.push('/'); return
     }
-
+    if (!parsed.sessionToken) {
+      localStorage.removeItem('gym_user'); router.push('/'); return
+    }
+    const token = parsed.sessionToken
     fetch('/api/init')
-      .then(() => fetch('/api/users', {
+      .then(() => fetch('/api/auth/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: parsed.name }),
+        body: JSON.stringify({ token }),
       }))
-      .then(res => res.json())
+      .then(res => { if (!res.ok) throw new Error(); return res.json() })
       .then((freshUser: User) => {
-        localStorage.setItem('gym_user', JSON.stringify(freshUser))
+        localStorage.setItem('gym_user', JSON.stringify({ ...freshUser, sessionToken: token }))
         setUser(freshUser)
       })
-      .catch(() => setUser(parsed))
+      .catch(() => { localStorage.removeItem('gym_user'); router.push('/') })
   }, [router])
 
   useEffect(() => {
