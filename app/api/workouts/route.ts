@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { userId, exerciseId, weightKg, reps, sets, passed } = body
+    const { userId, exerciseId, weightKg, reps, sets, passed, loggedAt } = body
 
     if (!userId || !exerciseId || weightKg == null || !reps || !sets) {
       return NextResponse.json(
@@ -91,10 +91,11 @@ export async function POST(request: NextRequest) {
     }
 
     const didPass = passed !== false
+    const ts = loggedAt ? new Date(loggedAt).toISOString() : new Date().toISOString()
 
     const { rows } = await sql`
-      INSERT INTO workout_logs (user_id, exercise_id, weight_kg, reps, sets, passed)
-      VALUES (${userId}, ${exerciseId}, ${weightKg}, ${reps}, ${sets}, ${didPass})
+      INSERT INTO workout_logs (user_id, exercise_id, weight_kg, reps, sets, passed, logged_at)
+      VALUES (${userId}, ${exerciseId}, ${weightKg}, ${reps}, ${sets}, ${didPass}, ${ts})
       RETURNING id, user_id, exercise_id, weight_kg, reps, sets, passed, logged_at
     `
 

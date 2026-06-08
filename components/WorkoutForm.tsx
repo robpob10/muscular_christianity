@@ -11,8 +11,13 @@ function emptyRows(): SetRow[] {
   return Array.from({ length: 5 }, () => ({ weight: '', reps: '' }))
 }
 
+function todayString() {
+  return new Date().toISOString().slice(0, 10)
+}
+
 export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormProps) {
   const [rows, setRows] = useState<SetRow[]>(emptyRows())
+  const [date, setDate] = useState(todayString())
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -55,6 +60,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
           body: JSON.stringify({
             userId: user.id, exerciseId: exercise.id,
             weightKg: parseFloat(row.weight), reps: parseInt(row.reps), sets: 1,
+            loggedAt: date,
           }),
         })
         if (!res.ok) {
@@ -104,6 +110,16 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
             />
           </div>
         ))}
+
+        <div className="flex items-center gap-2 pt-1">
+          <label className="text-xs text-leather-400 uppercase tracking-wide shrink-0">Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            className="min-w-0 flex-1 bg-leather-700 border border-leather-600 rounded-lg px-2 py-1.5 text-leather-100 focus:outline-none focus:ring-1 focus:ring-leather-300 text-sm transition"
+          />
+        </div>
 
         {error && <p className="text-gym-red text-xs pt-1">{error}</p>}
 
