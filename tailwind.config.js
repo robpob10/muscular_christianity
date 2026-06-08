@@ -22,6 +22,7 @@ module.exports = {
         gym: {
           yellow: '#fbbf24',
           red:    '#f87171',
+          wood:   '#8B5E3C',
         },
       },
     },

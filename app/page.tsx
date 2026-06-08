@@ -59,7 +59,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-leather-900 flex items-start justify-center px-4 pt-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-leather-300 mb-6 shadow-lg shadow-leather-300/20">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gym-wood mb-6 shadow-lg">
             <svg className="w-10 h-10 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
               <rect x="10.5" y="2" width="3" height="20" rx="1" />
               <rect x="4" y="7" width="16" height="3" rx="1" />
