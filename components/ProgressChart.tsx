@@ -126,7 +126,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
           const point: Record<string, number | string | { weight: number; reps: number }[]> = { date }
           Object.entries(entries).forEach(([name, sets]) => {
             point[name] = bw
-              ? sets.reduce((sum, s) => sum + s.reps, 0)
+              ? Math.max(...sets.map(s => s.reps))
               : avgWeightTopReps(sets)
             point[`${name}__allsets`] = sets
           })
@@ -141,7 +141,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   return (
     <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
       <h2 className="text-lg font-bold text-leather-100 mb-1">Progress</h2>
-      <p className="text-leather-400 text-sm mb-5">{isBodyweight ? 'Total reps per session' : 'Avg weight (kg) — top 15 reps'}</p>
+      <p className="text-leather-400 text-sm mb-5">{isBodyweight ? 'Max reps per set' : 'Avg weight (kg) — top 15 reps'}</p>
 
       {loading ? (
         <div className="h-56 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
