@@ -29,6 +29,10 @@ export default function HistoryPage() {
   const [groups, setGroups] = useState<SessionGroup[]>([])
   const [loading, setLoading] = useState(true)
   const [deletingKey, setDeletingKey] = useState<string | null>(null)
+  const [editingName, setEditingName] = useState(false)
+  const [nameInput, setNameInput] = useState('')
+  const [nameLoading, setNameLoading] = useState(false)
+  const [nameError, setNameError] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -46,6 +50,27 @@ export default function HistoryPage() {
       .catch(() => router.push('/'))
       .finally(() => setLoading(false))
   }, [status, router])
+
+  async function handleNameSave(e: React.FormEvent) {
+    e.preventDefault()
+    if (!nameInput.trim()) { setNameError('Name cannot be empty'); return }
+    setNameLoading(true); setNameError('')
+    try {
+      const res = await fetch('/api/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nameInput.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setNameError(data.error || 'Failed to update'); return }
+      setUser(data)
+      setEditingName(false)
+    } catch {
+      setNameError('Something went wrong')
+    } finally {
+      setNameLoading(false)
+    }
+  }
 
   async function handleDelete(group: SessionGroup) {
     if (!user) return
@@ -77,7 +102,41 @@ export default function HistoryPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        <h1 className="text-leather-100 font-bold text-xl mb-6">History</h1>
+        <div className="flex items-center gap-3 mb-6">
+          {editingName ? (
+            <form onSubmit={handleNameSave} className="flex items-center gap-2 flex-1">
+              <input
+                type="text"
+                value={nameInput}
+                onChange={e => setNameInput(e.target.value)}
+                className="bg-leather-700 border border-leather-600 rounded-lg px-3 py-1.5 text-leather-100 focus:outline-none focus:ring-1 focus:ring-leather-300 text-sm"
+                autoFocus
+              />
+              <button type="submit" disabled={nameLoading}
+                className="text-xs bg-gym-yellow text-leather-900 font-bold px-3 py-1.5 rounded-lg disabled:opacity-50 transition">
+                {nameLoading ? '…' : 'Save'}
+              </button>
+              <button type="button" onClick={() => { setEditingName(false); setNameError('') }}
+                className="text-xs text-leather-400 hover:text-leather-100 transition">
+                Cancel
+              </button>
+              {nameError && <span className="text-xs text-gym-red">{nameError}</span>}
+            </form>
+          ) : (
+            <>
+              <h1 className="text-leather-100 font-bold text-xl">{user?.name ?? 'History'}</h1>
+              <button
+                onClick={() => { setNameInput(user?.name ?? ''); setEditingName(true) }}
+                className="text-leather-600 hover:text-leather-300 transition"
+                title="Edit name"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2a2 2 0 01.586-1.414z" />
+                </svg>
+              </button>
+            </>
+          )}
+        </div>
 
         {loading ? (
           <p className="text-leather-400 text-sm">Loading...</p>
