@@ -68,29 +68,20 @@ export default function AdminPage() {
           Users <span className="text-leather-400 font-normal text-sm ml-2">{users.length} total</span>
         </h1>
 
-        <div className="bg-leather-800 rounded-2xl border border-leather-600 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-leather-600">
-                <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs">Name</th>
-                <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs">Email</th>
-                <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs w-16">Sets</th>
-                <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs w-24">Last workout</th>
-                <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs w-24">Joined</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u.id} className="border-b border-leather-700/50 last:border-0">
-                  <td className="px-4 py-3 text-leather-100 font-medium">{u.name}</td>
-                  <td className="px-4 py-3 text-leather-400 font-mono text-xs">{u.email}</td>
-                  <td className="px-4 py-3 text-leather-300">{u.workout_count}</td>
-                  <td className="px-4 py-3 text-leather-400">{formatDate(u.last_workout)}</td>
-                  <td className="px-4 py-3 text-leather-400">{formatDate(u.created_at)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="space-y-3">
+          {users.map(u => (
+            <div key={u.id} className="bg-leather-800 rounded-xl border border-leather-600 px-4 py-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-leather-100 font-semibold">{u.name}</span>
+                <span className="text-leather-300 text-sm font-mono">{u.workout_count} workout{u.workout_count !== '1' ? 's' : ''}</span>
+              </div>
+              <div className="text-leather-400 text-xs font-mono mb-2">{u.email}</div>
+              <div className="flex gap-4 text-xs text-leather-400">
+                <span>Last: {formatDate(u.last_workout)}</span>
+                <span>Joined: {formatDate(u.created_at)}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </main>
     </div>

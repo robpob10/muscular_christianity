@@ -17,8 +17,8 @@ export async function GET() {
       u.name,
       u.email,
       u.created_at,
-      COUNT(wl.id)        AS workout_count,
-      MAX(wl.logged_at)   AS last_workout
+      COUNT(DISTINCT exercise_id || '-' || DATE(wl.logged_at))  AS workout_count,
+      MAX(wl.logged_at)                                          AS last_workout
     FROM users u
     LEFT JOIN workout_logs wl ON wl.user_id = u.id AND wl.deleted = FALSE
     GROUP BY u.id, u.name, u.email, u.created_at
