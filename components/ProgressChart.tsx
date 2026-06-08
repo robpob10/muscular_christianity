@@ -52,6 +52,16 @@ interface TooltipEntry {
   payload: Record<string, number | string | SetEntry[]>
 }
 
+function groupSets(sets: SetEntry[]) {
+  const groups: { w: number; reps: number; count: number }[] = []
+  for (const s of sets) {
+    const last = groups[groups.length - 1]
+    if (last && last.w === s.weight && last.reps === s.reps) { last.count++ }
+    else { groups.push({ w: s.weight, reps: s.reps, count: 1 }) }
+  }
+  return groups
+}
+
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) {
   if (!active || !payload?.length) return null
   return (
@@ -63,11 +73,14 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
           <div key={entry.name} style={{ marginBottom: 3 }}>
             <span style={{ color: entry.color, fontWeight: 600 }}>{entry.name}</span>
             <div style={{ marginTop: 3 }}>
-              {allSets?.map((s, i) => (
-                <div key={i} style={{ color: '#d0d4e4', marginLeft: 8 }}>
-                  {s.weight} kg <span style={{ color: '#6d728a' }}>× {s.reps} reps</span>
-                </div>
-              ))}
+              {groupSets(allSets ?? []).map((g, i) => {
+                const wStr = g.w > 0 ? `${g.w}kg` : 'BW'
+                return (
+                  <div key={i} style={{ color: '#d0d4e4', marginLeft: 8 }}>
+                    {wStr} ×{g.reps}{g.count > 1 && <span style={{ color: '#6d728a' }}> ×{g.count}</span>}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )

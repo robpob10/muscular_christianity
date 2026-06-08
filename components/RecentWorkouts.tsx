@@ -20,6 +20,24 @@ interface Props {
   currentUser: { id: number; name: string } | null
 }
 
+function groupSets(sets: SetEntry[]) {
+  const groups: { w: number; reps: number; count: number }[] = []
+  for (const s of sets) {
+    const w = parseFloat(s.weight_kg)
+    const last = groups[groups.length - 1]
+    if (last && last.w === w && last.reps === s.reps) { last.count++ }
+    else { groups.push({ w, reps: s.reps, count: 1 }) }
+  }
+  return groups
+}
+
+function formatSets(sets: SetEntry[]): string {
+  return groupSets(sets).map(g => {
+    const wStr = g.w > 0 ? `${g.w}kg` : 'BW'
+    return g.count > 1 ? `${wStr} ×${g.reps} ×${g.count}` : `${wStr} ×${g.reps}`
+  }).join(', ')
+}
+
 function capitalize(s: string) {
   return s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
@@ -137,10 +155,7 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
               </div>
 
               <div className="text-leather-400 text-xs font-mono mb-2">
-                {item.sets.map((s, i) => {
-                  const w = parseFloat(s.weight_kg)
-                  return <span key={i}>{i > 0 && ', '}{w > 0 ? `${w}kg` : 'BW'} ×{s.reps}</span>
-                })}
+                {formatSets(item.sets)}
               </div>
 
               {item.reactions?.length > 0 && (
