@@ -68,7 +68,7 @@ export default function LoginPage() {
           <h1 className="text-4xl font-black text-leather-100 tracking-tight uppercase">
             Muscular Christianity
           </h1>
-          <p className="text-leather-400 mt-2 text-lg">Track your gains</p>
+
         </div>
 
         <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
