@@ -29,7 +29,7 @@ export default function SetupPage() {
         body: JSON.stringify({ name: name.trim() }),
       })
       const data = await res.json()
-      if (!res.ok) { setError(data.error || 'Something went wrong'); return }
+      if (!res.ok) { setError('Something went wrong — please try again'); return }
       router.push('/dashboard')
     } catch {
       setError('Something went wrong')

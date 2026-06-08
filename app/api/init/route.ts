@@ -47,6 +47,10 @@ export async function GET() {
     await sql`ALTER TABLE workout_logs ADD COLUMN IF NOT EXISTS deleted BOOLEAN NOT NULL DEFAULT FALSE`
     await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT`
     await sql`CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique ON users (email) WHERE email IS NOT NULL`
+    // Drop name uniqueness — email is now the unique key
+    await sql`ALTER TABLE users DROP CONSTRAINT IF EXISTS users_name_key`
+    // Remove legacy users with no email (their workout data cascades)
+    await sql`DELETE FROM users WHERE email IS NULL`
 
     await sql`
       CREATE TABLE IF NOT EXISTS magic_links (
