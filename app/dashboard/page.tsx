@@ -9,10 +9,6 @@ import ProgressChart from '@/components/ProgressChart'
 import AddExerciseModal from '@/components/AddExerciseModal'
 import RecentWorkouts from '@/components/RecentWorkouts'
 
-const PHRASES = [
-  'Let he without grip it be the first to rip it',
-  'King of the Juiced',
-]
 
 interface User {
   id: number
@@ -30,7 +26,6 @@ export default function DashboardPage() {
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [phrase] = useState(() => PHRASES[Math.floor(Math.random() * PHRASES.length)])
   const router = useRouter()
 
   const fetchExercises = useCallback(async () => {
@@ -127,13 +122,6 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        {/* Catchphrase banner */}
-        <div className="mb-6 rounded-lg px-6 py-4 bg-leather-800">
-          <p className="italic text-center font-medium text-base whitespace-pre-line" style={{ color: '#fbbf24' }}>
-            {phrase}
-          </p>
-        </div>
-
         {/* Recent workouts feed */}
         <RecentWorkouts refreshKey={refreshKey} />
 
