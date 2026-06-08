@@ -8,19 +8,19 @@ export async function GET(request: NextRequest) {
 
     const { rows } = await sql`
       SELECT
-        wl.id,
-        wl.weight_kg,
-        wl.reps,
-        wl.sets,
-        wl.passed,
-        wl.logged_at,
-        u.name  AS user_name,
-        e.name  AS exercise_name
+        u.name                                                        AS user_name,
+        e.name                                                        AS exercise_name,
+        MAX(wl.logged_at)                                             AS last_logged_at,
+        json_agg(
+          json_build_object('weight_kg', wl.weight_kg, 'reps', wl.reps)
+          ORDER BY wl.logged_at
+        )                                                             AS sets
       FROM workout_logs wl
       JOIN users     u ON u.id = wl.user_id
       JOIN exercises e ON e.id = wl.exercise_id
       WHERE wl.deleted = FALSE
-      ORDER BY wl.logged_at DESC
+      GROUP BY u.name, e.name, DATE(wl.logged_at)
+      ORDER BY last_logged_at DESC
       LIMIT ${limit}
     `
 

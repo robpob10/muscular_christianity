@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from 'react'
 
-interface RecentLog {
-  id: number
-  weight_kg: string
-  reps: number
-  sets: number
+interface SetEntry { weight_kg: string; reps: number }
+
+interface RecentGroup {
   user_name: string
   exercise_name: string
+  sets: SetEntry[]
 }
 
 function capitalize(s: string) {
@@ -16,24 +15,27 @@ function capitalize(s: string) {
 }
 
 export default function RecentWorkouts({ refreshKey }: { refreshKey: number }) {
-  const [logs, setLogs] = useState<RecentLog[]>([])
+  const [groups, setGroups] = useState<RecentGroup[]>([])
 
   useEffect(() => {
     fetch('/api/recent?limit=3')
       .then(r => r.json())
-      .then(data => Array.isArray(data) && setLogs(data))
+      .then(data => Array.isArray(data) && setGroups(data))
       .catch(() => {})
   }, [refreshKey])
 
-  if (logs.length === 0) return null
+  if (groups.length === 0) return null
 
   return (
     <div className="mb-6 space-y-1 text-center">
-      {logs.map(log => (
-        <div key={log.id} className="text-sm font-mono text-leather-400">
-          {log.user_name} – {capitalize(log.exercise_name)}{'  '}{parseFloat(log.weight_kg)} kg{'  '}{log.sets}×{log.reps}
-        </div>
-      ))}
+      {groups.map((g, i) => {
+        const setsStr = g.sets.map(s => `${parseFloat(s.weight_kg)}kg ×${s.reps}`).join(', ')
+        return (
+          <div key={i} className="text-sm font-mono text-leather-400">
+            {g.user_name} – {capitalize(g.exercise_name)}{'  '}{setsStr}
+          </div>
+        )
+      })}
     </div>
   )
 }
