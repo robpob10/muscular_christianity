@@ -20,7 +20,7 @@ module.exports = {
           900: '#191c2d', // page background (dark navy)
         },
         gym: {
-          yellow: '#fbbf24',
+          yellow: '#A67C52',
           red:    '#f87171',
           wood:   '#8B5E3C',
         },
