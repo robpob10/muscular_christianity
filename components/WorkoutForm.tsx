@@ -40,7 +40,6 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
     setSimpleSets('1')
     setRows(emptyRows())
     setError('')
-    setSuccess(false)
 
     fetch(`/api/workouts?userId=${user.id}&exerciseId=${exercise.id}`)
       .then(r => r.json())
