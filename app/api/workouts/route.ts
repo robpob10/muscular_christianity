@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
         WHERE wl.exercise_id = ${exerciseId}
           AND wl.user_id = ${userId}
           AND wl.deleted = FALSE
-        ORDER BY wl.logged_at ASC
+        ORDER BY wl.logged_at ASC, wl.id ASC
       `
       rows = result.rows
     } else {
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         JOIN users u ON u.id = wl.user_id
         WHERE wl.exercise_id = ${exerciseId}
           AND wl.deleted = FALSE
-        ORDER BY wl.logged_at ASC
+        ORDER BY wl.logged_at ASC, wl.id ASC
       `
       rows = result.rows
     }

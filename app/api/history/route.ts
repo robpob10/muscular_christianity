@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
         DATE(wl.logged_at)                                            AS workout_date,
         json_agg(
           json_build_object('id', wl.id, 'weight_kg', wl.weight_kg, 'reps', wl.reps)
-          ORDER BY wl.logged_at
+          ORDER BY wl.logged_at, wl.id
         )                                                             AS sets
       FROM workout_logs wl
       JOIN exercises e ON e.id = wl.exercise_id

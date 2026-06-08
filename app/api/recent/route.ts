@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
           MAX(wl.logged_at)                                           AS last_logged_at,
           json_agg(
             json_build_object('weight_kg', wl.weight_kg, 'reps', wl.reps)
-            ORDER BY wl.logged_at
+            ORDER BY wl.logged_at, wl.id
           )                                                           AS sets
         FROM workout_logs wl
         JOIN users     u ON u.id = wl.user_id
