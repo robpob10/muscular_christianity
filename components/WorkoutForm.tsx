@@ -17,6 +17,12 @@ function emptyRows(n = 3): SetRow[] {
 
 const inputCls = 'min-w-0 w-full bg-leather-700 border border-leather-600 rounded-lg px-2 py-2 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-1 focus:ring-leather-300 text-sm text-center transition'
 
+const CATCHPHRASES = [
+  'Let he who is without grip it cast the first rip it!',
+  'And then Onan spilled his protein shake on the ground - committing the Sin of Onan',
+  'But lord, what about when there is only 1 set of footprints in the sand? That child is when I had you on my back - so I could do Hungarian Lunges #godoflegs',
+]
+
 export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormProps) {
   const [advanced, setAdvanced] = useState(false)
   const [simpleReps, setSimpleReps] = useState('')
@@ -25,7 +31,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
   const [rows, setRows] = useState<SetRow[]>(emptyRows())
   const [date, setDate] = useState(todayString())
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [catchphrase, setCatchphrase] = useState<string | null>(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -96,9 +102,8 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
           throw new Error(data.error || 'Failed to log')
         }
       }
-      setSuccess(true)
+      setCatchphrase(CATCHPHRASES[Math.floor(Math.random() * CATCHPHRASES.length)])
       onLogged()
-      setTimeout(() => setSuccess(false), 2500)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to log workout.')
     } finally {
@@ -165,20 +170,34 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
 
         {error && <p className="text-gym-red text-xs pt-1">{error}</p>}
 
-        {success && (
-          <div className="flex items-center gap-2 text-leather-300 text-sm font-medium pt-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            Logged!
-          </div>
-        )}
-
         <button type="submit" disabled={loading}
           className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 rounded-lg transition uppercase tracking-wide text-sm mt-1">
           {loading ? 'Logging...' : 'Spread the Holy Word'}
         </button>
       </form>
+
+      {catchphrase && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-leather-900/80"
+          onClick={() => setCatchphrase(null)}
+        >
+          <div className="bg-leather-800 border border-leather-600 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
+            <div className="w-10 h-10 rounded-full bg-gym-yellow flex items-center justify-center mx-auto mb-5">
+              <svg className="w-5 h-5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="10.5" y="2" width="3" height="20" rx="1" />
+                <rect x="4" y="7" width="16" height="3" rx="1" />
+              </svg>
+            </div>
+            <p className="text-leather-100 text-base leading-relaxed break-words">{catchphrase}</p>
+            <button
+              onClick={() => setCatchphrase(null)}
+              className="mt-6 text-xs text-leather-400 hover:text-leather-100 uppercase tracking-widest transition"
+            >
+              Amen
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
