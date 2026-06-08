@@ -25,15 +25,6 @@ interface ProgressChartProps {
   currentUser: User | null
 }
 
-interface SelectedEntry {
-  id: number
-  date: string
-  weight: number
-  reps: number
-  sets: number
-  userName: string
-}
-
 const COLORS = ['#00d4c8','#60a5fa','#a78bfa','#f472b6','#fb923c','#facc15','#22d3ee','#f87171']
 
 function formatDate(iso: string) {
@@ -68,8 +59,6 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   const [chartData, setChartData] = useState<Record<string, number | string>[]>([])
   const [userNames, setUserNames] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
-  const [selected, setSelected] = useState<SelectedEntry | null>(null)
-  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -111,34 +100,8 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
       .finally(() => setLoading(false))
   }, [exercise.id, refreshKey])
 
-  async function handleDelete() {
-    if (!selected || !currentUser) return
-    setDeleting(true)
-    try {
-      const res = await fetch(`/api/workouts?id=${selected.id}&userId=${currentUser.id}`, { method: 'DELETE' })
-      if (!res.ok) throw new Error()
-      setSelected(null)
-      // Trigger refresh by re-fetching — parent will handle via refreshKey
-      // For now just remove the point locally and let parent eventually refresh
-      setChartData(prev => prev.map(point => {
-        const updated = { ...point }
-        if (updated[`${selected.userName}__id`] === selected.id) {
-          delete updated[selected.userName]
-          delete updated[`${selected.userName}__reps`]
-          delete updated[`${selected.userName}__sets`]
-          delete updated[`${selected.userName}__id`]
-        }
-        return updated
-      }).filter(point => Object.keys(point).some(k => !k.includes('__') && k !== 'date')))
-    } catch {
-      // ignore
-    } finally {
-      setDeleting(false)
-    }
-  }
-
   return (
-    <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600 relative">
+    <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
       <h2 className="text-lg font-bold text-leather-100 mb-1">Progress</h2>
       <p className="text-leather-400 text-sm mb-5">Max weight (kg) per session</p>
 
@@ -169,31 +132,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
                   dataKey={name}
                   stroke={color}
                   strokeWidth={2}
-                  dot={(props: { cx: number; cy: number; payload: Record<string, number | string>; index: number }) => {
-                    const { cx, cy, payload } = props
-                    const logId = payload[`${name}__id`] as number
-                    return (
-                      <circle
-                        key={`dot-${name}-${cx}-${cy}`}
-                        cx={cx} cy={cy} r={isMe ? 5 : 4}
-                        fill={color}
-                        strokeWidth={isMe ? 2 : 0}
-                        stroke={isMe ? '#fff' : undefined}
-                        style={{ cursor: isMe ? 'pointer' : 'default' }}
-                        onClick={() => {
-                          if (!isMe || !logId) return
-                          setSelected({
-                            id: logId,
-                            date: payload.date as string,
-                            weight: payload[name] as number,
-                            reps: payload[`${name}__reps`] as number,
-                            sets: payload[`${name}__sets`] as number,
-                            userName: name,
-                          })
-                        }}
-                      />
-                    )
-                  }}
+                  dot={{ r: isMe ? 5 : 4, fill: color, strokeWidth: isMe ? 2 : 0, stroke: isMe ? '#fff' : undefined }}
                   activeDot={{ r: 6 }}
                   connectNulls
                 />
@@ -201,33 +140,6 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
             })}
           </LineChart>
         </ResponsiveContainer>
-      )}
-
-      {/* Delete confirmation */}
-      {selected && (
-        <div className="absolute inset-0 bg-leather-900/80 rounded-2xl flex items-center justify-center p-6">
-          <div className="bg-leather-800 border border-leather-600 rounded-xl p-5 w-full max-w-xs space-y-3">
-            <p className="text-leather-100 font-semibold text-sm">Delete this entry?</p>
-            <p className="text-leather-400 text-sm">
-              {selected.date} · {selected.weight} kg · {selected.sets}×{selected.reps} reps
-            </p>
-            <div className="flex gap-3 pt-1">
-              <button
-                onClick={() => setSelected(null)}
-                className="flex-1 py-2 text-sm rounded-lg bg-leather-700 text-leather-100 hover:bg-leather-600 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                disabled={deleting}
-                className="flex-1 py-2 text-sm rounded-lg bg-gym-red text-white font-semibold hover:opacity-90 disabled:opacity-50 transition"
-              >
-                {deleting ? 'Deleting…' : 'Delete'}
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   )

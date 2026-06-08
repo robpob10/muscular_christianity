@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import ExerciseTabs from '@/components/ExerciseTabs'
 import WorkoutForm from '@/components/WorkoutForm'
 import ProgressChart from '@/components/ProgressChart'
@@ -114,7 +115,7 @@ export default function DashboardPage() {
             </svg>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-gym-red font-semibold text-sm">{user.name}</span>
+            <Link href="/history" className="text-gym-red font-semibold text-sm hover:opacity-80 transition">{user.name}</Link>
             <button
               onClick={handleLogout}
               className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
