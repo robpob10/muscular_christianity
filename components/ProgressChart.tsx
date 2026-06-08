@@ -27,14 +27,29 @@ interface ProgressChartProps {
 
 const COLORS = ['#00d4c8','#60a5fa','#a78bfa','#f472b6','#fb923c','#facc15','#22d3ee','#f87171']
 
+function avgWeightTopReps(sets: { weight: number; reps: number }[], target = 15): number {
+  const sorted = [...sets].sort((a, b) => b.reps - a.reps)
+  let totalReps = 0
+  const picked: number[] = []
+  for (const s of sorted) {
+    if (totalReps >= target) break
+    totalReps += s.reps
+    picked.push(s.weight)
+  }
+  if (picked.length === 0) return 0
+  return Math.round((picked.reduce((a, b) => a + b, 0) / picked.length) * 10) / 10
+}
+
 function formatDate(iso: string) {
   const d = new Date(iso)
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
+interface SetEntry { weight: number; reps: number }
+
 interface TooltipEntry {
   name: string; value: number; color: string
-  payload: Record<string, number | string>
+  payload: Record<string, number | string | SetEntry[]>
 }
 
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: TooltipEntry[]; label?: string }) {
@@ -42,21 +57,27 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
   return (
     <div style={{ background: '#2f3349', border: '1px solid #484d6e', borderRadius: 6, padding: '10px 14px', fontSize: 13 }}>
       <p style={{ color: '#6d728a', marginBottom: 6 }}>{label}</p>
-      {payload.map(entry => (
-        <div key={entry.name} style={{ color: entry.color, marginBottom: 3 }}>
-          <span style={{ fontWeight: 600 }}>{entry.name}</span>{': '}
-          <span>{entry.value} kg</span>
-          <span style={{ color: '#6d728a', marginLeft: 6 }}>
-            {entry.payload[`${entry.name}__sets`]} × {entry.payload[`${entry.name}__reps`]} reps
-          </span>
-        </div>
-      ))}
+      {payload.map(entry => {
+        const allSets = entry.payload[`${entry.name}__allsets`] as SetEntry[] | undefined
+        return (
+          <div key={entry.name} style={{ marginBottom: 3 }}>
+            <span style={{ color: entry.color, fontWeight: 600 }}>{entry.name}</span>
+            <div style={{ marginTop: 3 }}>
+              {allSets?.map((s, i) => (
+                <div key={i} style={{ color: '#d0d4e4', marginLeft: 8 }}>
+                  {s.weight} kg <span style={{ color: '#6d728a' }}>× {s.reps} reps</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
 
 export default function ProgressChart({ exercise, refreshKey, currentUser }: ProgressChartProps) {
-  const [chartData, setChartData] = useState<Record<string, number | string>[]>([])
+  const [chartData, setChartData] = useState<Record<string, number | string | { weight: number; reps: number }[]>[]>([])
   const [userNames, setUserNames] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -73,24 +94,19 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
         logs.forEach(l => usersSet.add(l.user_name))
         setUserNames(Array.from(usersSet))
 
-        const byDate: Record<string, Record<string, { weight: number; reps: number; sets: number; id: number }>> = {}
+        const byDate: Record<string, Record<string, { weight: number; reps: number }[]>> = {}
         logs.forEach(l => {
           const date = formatDate(l.logged_at)
           if (!byDate[date]) byDate[date] = {}
-          const w = parseFloat(l.weight_kg)
-          const prev = byDate[date][l.user_name]
-          if (!prev || w > prev.weight) {
-            byDate[date][l.user_name] = { weight: w, reps: l.reps, sets: l.sets, id: l.id }
-          }
+          if (!byDate[date][l.user_name]) byDate[date][l.user_name] = []
+          byDate[date][l.user_name].push({ weight: parseFloat(l.weight_kg), reps: l.reps })
         })
 
         const points = Object.entries(byDate).map(([date, entries]) => {
-          const point: Record<string, number | string> = { date }
-          Object.entries(entries).forEach(([name, { weight, reps, sets, id }]) => {
-            point[name] = weight
-            point[`${name}__reps`] = reps
-            point[`${name}__sets`] = sets
-            point[`${name}__id`] = id
+          const point: Record<string, number | string | { weight: number; reps: number }[]> = { date }
+          Object.entries(entries).forEach(([name, sets]) => {
+            point[name] = avgWeightTopReps(sets)
+            point[`${name}__allsets`] = sets
           })
           return point
         })
@@ -103,7 +119,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   return (
     <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
       <h2 className="text-lg font-bold text-leather-100 mb-1">Progress</h2>
-      <p className="text-leather-400 text-sm mb-5">Max weight (kg) per session</p>
+      <p className="text-leather-400 text-sm mb-5">Avg weight (kg) — top 15 reps</p>
 
       {loading ? (
         <div className="h-56 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
