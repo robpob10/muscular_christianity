@@ -49,12 +49,12 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'No valid ids' }, { status: 400 })
     }
 
-    await sql`
-      UPDATE workout_logs SET deleted = TRUE
-      WHERE id = ANY(${idList as unknown as number[]}::int[])
-        AND user_id = ${userId}
-        AND deleted = FALSE
-    `
+    for (const id of idList) {
+      await sql`
+        UPDATE workout_logs SET deleted = TRUE
+        WHERE id = ${id} AND user_id = ${userId} AND deleted = FALSE
+      `
+    }
 
     return NextResponse.json({ ok: true })
   } catch (error) {
