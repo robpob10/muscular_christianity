@@ -72,7 +72,9 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
-          <h2 className="text-xl font-bold text-leather-100 mb-6">Enter the Gymdom of Heaven</h2>
+          <p className="text-center italic font-medium text-gym-yellow whitespace-pre-line mb-6">
+            {"Our Father\nFull of grace\nHallowed be his gains"}
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

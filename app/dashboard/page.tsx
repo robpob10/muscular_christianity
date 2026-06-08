@@ -9,7 +9,6 @@ import AddExerciseModal from '@/components/AddExerciseModal'
 import RecentWorkouts from '@/components/RecentWorkouts'
 
 const PHRASES = [
-  'Our Father, full of grace,\nhallowed be his gains',
   'Let he without grip it be the first to rip it',
   'King of the Juiced',
 ]
