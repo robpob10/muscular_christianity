@@ -107,9 +107,9 @@ export default function DashboardPage() {
               onAddClick={() => setShowAddModal(true)}
             />
             {activeExercise && (
-              <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <WorkoutForm user={user} exercise={activeExercise} onLogged={handleWorkoutLogged} />
+              <div className="mt-6 space-y-6">
                 <ProgressChart exercise={activeExercise} refreshKey={refreshKey} currentUser={user} />
+                <WorkoutForm user={user} exercise={activeExercise} onLogged={handleWorkoutLogged} />
               </div>
             )}
           </>
