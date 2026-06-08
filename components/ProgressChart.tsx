@@ -92,6 +92,7 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 export default function ProgressChart({ exercise, refreshKey, currentUser }: ProgressChartProps) {
   const [chartData, setChartData] = useState<Record<string, number | string | { weight: number; reps: number }[]>[]>([])
   const [userNames, setUserNames] = useState<string[]>([])
+  const [isBodyweight, setIsBodyweight] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -102,6 +103,9 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
         if (!Array.isArray(logs) || logs.length === 0) {
           setChartData([]); setUserNames([]); return
         }
+
+        const bw = logs.every(l => parseFloat(l.weight_kg) === 0)
+        setIsBodyweight(bw)
 
         const usersSet = new Set<string>()
         logs.forEach(l => usersSet.add(l.user_name))
@@ -118,7 +122,9 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
         const points = Object.entries(byDate).map(([date, entries]) => {
           const point: Record<string, number | string | { weight: number; reps: number }[]> = { date }
           Object.entries(entries).forEach(([name, sets]) => {
-            point[name] = avgWeightTopReps(sets)
+            point[name] = bw
+              ? sets.reduce((sum, s) => sum + s.reps, 0)
+              : avgWeightTopReps(sets)
             point[`${name}__allsets`] = sets
           })
           return point
@@ -132,7 +138,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   return (
     <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
       <h2 className="text-lg font-bold text-leather-100 mb-1">Progress</h2>
-      <p className="text-leather-400 text-sm mb-5">Avg weight (kg) — top 15 reps</p>
+      <p className="text-leather-400 text-sm mb-5">{isBodyweight ? 'Total reps per session' : 'Avg weight (kg) — top 15 reps'}</p>
 
       {loading ? (
         <div className="h-56 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
@@ -148,7 +154,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
           <LineChart data={chartData} margin={{ top: 16, right: 16, left: -16, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
             <XAxis dataKey="date" tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} />
-            <YAxis tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} unit=" kg" />
+            <YAxis tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} unit={isBodyweight ? '' : ' kg'} />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: 12, color: '#6d728a' }} />
             {userNames.map((name, i) => {
