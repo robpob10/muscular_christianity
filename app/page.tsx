@@ -56,28 +56,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-leather-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-leather-900 flex items-start justify-center px-4 pt-12">
       <div className="w-full max-w-md">
-        <div className="text-center mb-5">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-leather-300 mb-3 shadow-lg shadow-leather-300/20">
-            <svg className="w-6 h-6 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-leather-300 mb-6 shadow-lg shadow-leather-300/20">
+            <svg className="w-10 h-10 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
               <rect x="10.5" y="2" width="3" height="20" rx="1" />
               <rect x="4" y="7" width="16" height="3" rx="1" />
             </svg>
           </div>
-          <h1 className="text-2xl font-black text-leather-100 tracking-tight uppercase">
+          <h1 className="text-4xl font-black text-leather-100 tracking-tight uppercase">
             Muscular Christianity
           </h1>
+
         </div>
 
-        <div className="bg-leather-800 rounded-2xl p-5 border border-leather-600 shadow-2xl">
-          <p className="text-center italic font-medium text-gym-yellow whitespace-pre-line mb-4 text-sm leading-relaxed">
+        <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
+          <p className="text-center italic font-medium text-gym-yellow whitespace-pre-line mb-6">
             {"Our Father\nFull of grace\nHallowed be his gains"}
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-xs font-medium text-leather-400 mb-1.5 uppercase tracking-wide">
+              <label htmlFor="name" className="block text-sm font-medium text-leather-400 mb-2">
                 Your Name
               </label>
               <input
@@ -86,16 +87,16 @@ export default function LoginPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. John"
-                className="w-full bg-leather-700 border border-leather-600 rounded-lg px-3 py-2.5 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition text-sm"
+                className="w-full bg-leather-700 border border-leather-600 rounded-lg px-4 py-3 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition"
                 autoFocus
               />
-              {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
+              {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-2.5 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm"
+              className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition duration-200 uppercase tracking-wide text-sm mt-2"
             >
               {loading ? 'Loading...' : 'Enter the Gymdom of Heaven'}
             </button>
