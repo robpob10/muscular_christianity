@@ -40,6 +40,7 @@ function StarDisplay({ count }: { count: number }) {
 
 export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
   const [items, setItems] = useState<FeedItem[]>([])
+  const [fetchError, setFetchError] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [localRefresh, setLocalRefresh] = useState(0)
   const [reactingKey, setReactingKey] = useState<string | null>(null)
@@ -53,10 +54,17 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
 
   useEffect(() => {
     const limit = expanded ? 50 : 3
+    setFetchError(false)
     fetch(`/api/recent?limit=${limit}`)
       .then(r => r.json())
-      .then(data => Array.isArray(data) && setItems(data))
-      .catch(() => {})
+      .then(data => {
+        if (Array.isArray(data)) {
+          setItems(data)
+        } else {
+          setFetchError(true)
+        }
+      })
+      .catch(() => setFetchError(true))
   }, [refreshKey, expanded, localRefresh])
 
   async function handleReact(item: FeedItem) {
@@ -93,6 +101,15 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
     setReactingKey(null)
     setCommentValue('')
     setStarValue(5)
+  }
+
+  if (fetchError) {
+    return (
+      <div className="mb-8">
+        <h2 className="text-leather-400 text-xs uppercase tracking-widest font-semibold mb-2">Recent</h2>
+        <p className="text-leather-600 text-xs">Could not load feed — try refreshing.</p>
+      </div>
+    )
   }
 
   if (items.length === 0) return null
