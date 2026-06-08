@@ -137,9 +137,10 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
               </div>
 
               <div className="text-leather-400 text-xs font-mono mb-2">
-                {item.sets.map((s, i) => (
-                  <span key={i}>{i > 0 && ', '}{parseFloat(s.weight_kg)}kg ×{s.reps}</span>
-                ))}
+                {item.sets.map((s, i) => {
+                  const w = parseFloat(s.weight_kg)
+                  return <span key={i}>{i > 0 && ', '}{w > 0 ? `${w}kg` : 'BW'} ×{s.reps}</span>
+                })}
               </div>
 
               {item.reactions?.length > 0 && (

@@ -168,7 +168,7 @@ export default function HistoryPage() {
                         </td>
                       )}
                       <td className="px-4 py-1.5 text-leather-300 font-mono">
-                        {parseFloat(set.weight_kg)}kg ×{set.reps}
+                        {parseFloat(set.weight_kg) > 0 ? `${parseFloat(set.weight_kg)}kg` : 'BW'} ×{set.reps}
                       </td>
                       {si === 0 && (
                         <td rowSpan={group.sets.length} className="px-4 py-2 text-leather-400 align-top pt-3 whitespace-nowrap">
