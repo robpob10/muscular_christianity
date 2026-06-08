@@ -63,7 +63,7 @@ export default function SetupPage() {
 
         <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
           <p className="text-leather-400 text-sm text-center mb-6">
-            First time here! What should we call you?
+            What is thy name?
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
