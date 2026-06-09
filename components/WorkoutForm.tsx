@@ -22,7 +22,7 @@ const CATCHPHRASES = [
   'And then Onan spilled his protein shake on the ground',
   'Jesus, king of the Juiced',
   'On the 7th day god rested. Rest day is important',
-  'But lord, what about when there is only 1 set of footprints in the sand? That child is when I had you on my back - so I could do Hungarian Lunges #godoflegs',
+
 ]
 
 export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormProps) {
