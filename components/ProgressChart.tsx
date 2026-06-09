@@ -28,7 +28,7 @@ interface ProgressChartProps {
 const COLORS = ['#00d4c8','#60a5fa','#a78bfa','#f472b6','#fb923c','#facc15','#22d3ee','#f87171']
 
 function avgWeightTopReps(sets: { weight: number; reps: number }[], target = 15): number {
-  const sorted = [...sets].sort((a, b) => b.reps - a.reps)
+  const sorted = [...sets].sort((a, b) => b.weight - a.weight)
   let totalReps = 0
   const picked: number[] = []
   for (const s of sorted) {
