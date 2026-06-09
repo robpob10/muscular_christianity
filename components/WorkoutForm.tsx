@@ -45,14 +45,17 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
 
     fetch(`/api/workouts?userId=${user.id}&exerciseId=${exercise.id}`)
       .then(r => r.json())
-      .then((logs: { weight_kg: string; reps: number }[]) => {
+      .then((logs: { weight_kg: string; reps: number; logged_at: string }[]) => {
         if (!Array.isArray(logs) || logs.length === 0) return
-        const last = logs[logs.length - 1]
+        // Only prefill from the most recent session (same date as last log)
+        const lastDate = new Date(logs[logs.length - 1].logged_at).toDateString()
+        const session = logs.filter(l => new Date(l.logged_at).toDateString() === lastDate)
+        const last = session[session.length - 1]
         const lastWeight = parseFloat(last.weight_kg)
         setSimpleReps(last.reps.toString())
         setSimpleWeight(lastWeight > 0 ? lastWeight.toString() : '')
-        setSimpleSets(logs.length.toString())
-        const advRows: SetRow[] = logs.map(l => ({
+        setSimpleSets(session.length.toString())
+        const advRows: SetRow[] = session.map(l => ({
           weight: parseFloat(l.weight_kg) > 0 ? parseFloat(l.weight_kg).toString() : '',
           reps: l.reps.toString(),
         }))
