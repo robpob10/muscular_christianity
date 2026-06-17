@@ -78,21 +78,21 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
   const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <div className="grid gap-2 text-xs font-medium text-leather-400 uppercase tracking-wide"
+    <div className="px-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid gap-3 text-xs font-medium text-leather-400 uppercase tracking-wide"
           style={{ gridTemplateColumns: '1fr 1fr' }}>
           <div className="text-center">Reps</div>
           <div className="text-center">kg</div>
         </div>
-        <div className="grid gap-2" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
           <input type="number" value={reps} onChange={e => setReps(e.target.value)}
             placeholder="—" min="1" className={inputCls} />
           <input type="number" value={weight} onChange={e => setWeight(e.target.value)}
             placeholder="BW" min="0" step="0.5" className={inputCls} />
         </div>
 
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex items-center gap-2">
           <label className="text-xs text-leather-400 uppercase tracking-wide shrink-0">Date</label>
           <input type="date" value={date} onChange={e => setDate(e.target.value)}
             className="bg-leather-900 border border-leather-700 rounded-xl px-2 py-1.5 text-white focus:outline-none focus:border-leather-500 text-sm transition" />
