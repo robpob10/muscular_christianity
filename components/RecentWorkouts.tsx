@@ -133,7 +133,7 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
   if (items.length === 0) return null
 
   return (
-    <div className="mb-8">
+    <div className="mb-4">
       <h2 className="text-leather-400 text-xs uppercase tracking-widest font-semibold mb-3">Recent</h2>
 
       <div className="space-y-2">
@@ -221,7 +221,7 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
         })}
       </div>
 
-      <div className="mt-3 text-center">
+      <div className="mt-2 text-center">
         {!expanded ? (
           items.length >= 1 && (
             <button
