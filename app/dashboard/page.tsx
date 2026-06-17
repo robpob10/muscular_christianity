@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showFeed, setShowFeed] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
+  const feedRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
   const fetchExercises = useCallback(async () => {
@@ -77,7 +78,11 @@ export default function DashboardPage() {
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
-            onClick={() => setShowFeed(f => !f)}
+            onClick={() => {
+              const opening = !showFeed
+              setShowFeed(opening)
+              if (opening) setTimeout(() => feedRef.current?.scrollIntoView({ behavior: 'smooth' }), 50)
+            }}
             className={`text-xs border rounded px-3 py-1.5 transition ${showFeed ? 'text-leather-100 border-leather-400' : 'text-leather-400 hover:text-leather-100 border-leather-600 hover:border-leather-400'}`}
           >
             Feed
@@ -95,7 +100,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        {showFeed && <RecentWorkouts refreshKey={refreshKey} currentUser={user} />}
+        {showFeed && <div ref={feedRef}><RecentWorkouts refreshKey={refreshKey} currentUser={user} /></div>}
 
         {exercises.length === 0 ? (
           <div className="text-center text-leather-400 py-20">Loading exercises...</div>
