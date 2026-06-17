@@ -3,7 +3,7 @@ import './globals.css'
 import Providers from '@/components/Providers'
 
 export const metadata: Metadata = {
-  title: 'Muscular Christianity',
+  title: 'simple-gym.app',
   description: 'Track your gains',
 }
 

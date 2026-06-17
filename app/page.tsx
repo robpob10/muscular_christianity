@@ -31,11 +31,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-black text-white tracking-tight uppercase mb-4">
-            Muscular Christianity
+            simple-gym.app
           </h1>
-          <p className="italic text-leather-500 text-sm leading-relaxed whitespace-pre-line">
-            {"Our Father\nFull of grace\nHallowed be his gains"}
-          </p>
         </div>
 
         <div style={gradientBorder} className="rounded-2xl p-8">

@@ -56,7 +56,7 @@ export default function SetupPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-black text-white tracking-tight uppercase mb-4">
-            Muscular Christianity
+            simple-gym.app
           </h1>
           <p className="text-leather-500 text-sm">What is thy name?</p>
         </div>
@@ -78,7 +78,7 @@ export default function SetupPage() {
               style={gradientBorder}
               className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-xl transition uppercase tracking-wide text-sm"
             >
-              {loading ? 'Saving…' : 'Enter the Gymdom of Heaven'}
+              {loading ? 'Saving…' : 'Enter the Gym'}
             </button>
           </form>
         </div>

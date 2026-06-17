@@ -106,7 +106,7 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
             border: '2px solid transparent',
           }}
           className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition uppercase tracking-wide text-sm mt-1 hover:opacity-80">
-          {loading ? 'Logging...' : 'Spread the Holy Word'}
+          {loading ? 'Logging...' : 'Log'}
         </button>
       </form>
 
