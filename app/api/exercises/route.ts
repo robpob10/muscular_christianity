@@ -6,7 +6,7 @@ export async function GET() {
     const { rows } = await sql`
       SELECT e.id, e.name, COUNT(wl.id) as log_count
       FROM exercises e
-      LEFT JOIN workout_logs wl ON wl.exercise_id = e.id
+      INNER JOIN workout_logs wl ON wl.exercise_id = e.id AND wl.deleted = FALSE
       GROUP BY e.id, e.name
       ORDER BY log_count DESC, e.created_at ASC
     `
