@@ -112,20 +112,21 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
 
       {catchphrase && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-leather-900/80"
+          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80"
           onClick={() => setCatchphrase(null)}
         >
-          <div className="bg-leather-800 border border-leather-600 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
-            <div className="w-10 h-10 rounded-full bg-gym-yellow flex items-center justify-center mx-auto mb-5">
-              <svg className="w-5 h-5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="10.5" y="2" width="3" height="20" rx="1" />
-                <rect x="4" y="7" width="16" height="3" rx="1" />
-              </svg>
-            </div>
-            <p className="text-leather-100 text-base leading-relaxed break-words">{catchphrase}</p>
+          <div
+            style={{
+              background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+              border: '2px solid transparent',
+            }}
+            className="rounded-2xl p-8 max-w-sm w-full text-center"
+            onClick={e => e.stopPropagation()}
+          >
+            <p className="text-white text-base leading-relaxed break-words">{catchphrase}</p>
             <button
               onClick={() => setCatchphrase(null)}
-              className="mt-6 text-xs text-leather-400 hover:text-leather-100 uppercase tracking-widest transition"
+              className="mt-6 text-xs text-leather-500 hover:text-white uppercase tracking-widest transition"
             >
               Amen
             </button>
