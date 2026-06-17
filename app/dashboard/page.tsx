@@ -78,7 +78,7 @@ export default function DashboardPage() {
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
             onClick={() => setShowFeed(f => !f)}
-            className={`text-xs border rounded px-3 py-1.5 transition ${showFeed ? 'text-leather-100 border-leather-400' : 'text-leather-600 border-leather-700'}`}
+            className={`text-xs border rounded px-3 py-1.5 transition ${showFeed ? 'text-leather-100 border-leather-400' : 'text-leather-400 border-leather-600'}`}
           >
             Feed
           </button>
