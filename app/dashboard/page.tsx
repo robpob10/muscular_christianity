@@ -106,7 +106,7 @@ export default function DashboardPage() {
       <main className="max-w-5xl mx-auto px-4 py-6">
         {showFeed && <RecentWorkouts refreshKey={refreshKey} currentUser={user} />}
 
-        {exercises.length === 0 ? (
+        {!showFeed && (exercises.length === 0 ? (
           <div className="text-center text-leather-400 py-20">Loading exercises...</div>
         ) : (
           <>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
               </div>
             )}
           </>
-        )}
+        ))}
       </main>
 
       {showAddModal && (

@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const limit = Math.min(parseInt(searchParams.get('limit') ?? '3'), 50)
+    const limit = Math.min(parseInt(searchParams.get('limit') ?? '15'), 50)
+    const offset = Math.max(parseInt(searchParams.get('offset') ?? '0'), 0)
 
     const { rows } = await sql`
       WITH workout_sessions AS (
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
         AND rg.exercise_id    = ws.exercise_id
         AND rg.workout_date   = ws.workout_date
       ORDER BY ws.last_logged_at DESC
-      LIMIT ${limit}
+      LIMIT ${limit} OFFSET ${offset}
     `
 
     return NextResponse.json(rows)

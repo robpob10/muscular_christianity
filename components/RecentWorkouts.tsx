@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 
 interface SetEntry { weight_kg: string; reps: number }
 interface Reaction { reactor_user_id: number; reactor_name: string; stars: number; comment: string | null }
@@ -19,6 +19,8 @@ interface Props {
   refreshKey: number
   currentUser: { id: number; name: string } | null
 }
+
+const PAGE_SIZE = 15
 
 function groupSets(sets: SetEntry[]) {
   const groups: { w: number; reps: number; count: number }[] = []
@@ -58,30 +60,71 @@ function StarDisplay({ count }: { count: number }) {
 
 export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
   const [items, setItems] = useState<FeedItem[]>([])
+  const [offset, setOffset] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [fetchError, setFetchError] = useState(false)
   const [localRefresh, setLocalRefresh] = useState(0)
   const [reactingKey, setReactingKey] = useState<string | null>(null)
   const [starValue, setStarValue] = useState(5)
   const [commentValue, setCommentValue] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const offsetRef = useRef(0)
+  const loadingRef = useRef(false)
 
   function itemKey(item: FeedItem) {
     return `${item.user_id}-${item.exercise_id}-${item.workout_date}`
   }
 
+  const loadPage = useCallback(async (currentOffset: number, replace: boolean) => {
+    if (loadingRef.current) return
+    loadingRef.current = true
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/recent?limit=${PAGE_SIZE}&offset=${currentOffset}`)
+      const data = await res.json()
+      if (!Array.isArray(data)) { setFetchError(true); return }
+      if (replace) {
+        setItems(data)
+      } else {
+        setItems(prev => [...prev, ...data])
+      }
+      const newOffset = currentOffset + data.length
+      offsetRef.current = newOffset
+      setOffset(newOffset)
+      setHasMore(data.length === PAGE_SIZE)
+    } catch {
+      setFetchError(true)
+    } finally {
+      loadingRef.current = false
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     setFetchError(false)
-    fetch(`/api/recent?limit=50`)
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setItems(data)
-        } else {
-          setFetchError(true)
-        }
-      })
-      .catch(() => setFetchError(true))
-  }, [refreshKey, localRefresh])
+    setItems([])
+    setOffset(0)
+    offsetRef.current = 0
+    setHasMore(true)
+    loadPage(0, true)
+  }, [refreshKey, localRefresh, loadPage])
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !loadingRef.current) {
+        setHasMore(prev => {
+          if (prev) loadPage(offsetRef.current, false)
+          return prev
+        })
+      }
+    }, { rootMargin: '200px' })
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [loadPage])
 
   async function handleReact(item: FeedItem) {
     setSubmitting(true)
@@ -127,8 +170,6 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
       </div>
     )
   }
-
-  if (items.length === 0) return null
 
   return (
     <div className="mb-4">
@@ -219,6 +260,9 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
         })}
       </div>
 
+      <div ref={sentinelRef} className="py-2 text-center">
+        {loading && <span className="text-leather-600 text-xs">Loading...</span>}
+      </div>
     </div>
   )
 }
