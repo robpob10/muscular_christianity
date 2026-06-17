@@ -66,14 +66,14 @@ export default function DashboardPage() {
 
   if (status === 'loading' || !user) {
     return (
-      <div className="h-screen bg-black flex items-center justify-center">
+      <div className="fixed inset-0 bg-black flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-leather-300 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col bg-black">
+    <div className="fixed inset-0 flex flex-col bg-black">
       <header className="bg-black px-4 py-3 shrink-0">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
@@ -103,9 +103,9 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-hidden max-w-5xl mx-auto w-full px-4 pt-2">
+      <main className="flex-1 min-h-0 flex flex-col max-w-5xl mx-auto w-full px-4 pt-2">
         {showFeed && (
-          <div className="h-full overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto">
             <RecentWorkouts refreshKey={refreshKey} currentUser={user} currentUserImage={session?.user?.image} />
           </div>
         )}
@@ -113,20 +113,26 @@ export default function DashboardPage() {
         {!showFeed && (exercises.length === 0 ? (
           <div className="text-center text-leather-400 py-20">Loading exercises...</div>
         ) : (
-          <>
-            <ExerciseTabs
-              exercises={exercises}
-              activeExercise={activeExercise}
-              onSelect={setActiveExercise}
-              onAddClick={() => setShowAddModal(true)}
-            />
+          <div className="flex-1 min-h-0 flex flex-col">
+            <div className="shrink-0">
+              <ExerciseTabs
+                exercises={exercises}
+                activeExercise={activeExercise}
+                onSelect={setActiveExercise}
+                onAddClick={() => setShowAddModal(true)}
+              />
+            </div>
             {activeExercise && (
-              <div className="mt-3 space-y-4">
-                <ProgressChart exercise={activeExercise} refreshKey={refreshKey} currentUser={user} />
-                <WorkoutForm user={user} exercise={activeExercise} onLogged={handleWorkoutLogged} />
+              <div className="flex-1 min-h-0 flex flex-col mt-3 gap-4">
+                <div className="flex-1 min-h-0">
+                  <ProgressChart exercise={activeExercise} refreshKey={refreshKey} currentUser={user} />
+                </div>
+                <div className="shrink-0">
+                  <WorkoutForm user={user} exercise={activeExercise} onLogged={handleWorkoutLogged} />
+                </div>
               </div>
             )}
-          </>
+          </div>
         ))}
       </main>
 

@@ -137,46 +137,48 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   }, [exercise.id, refreshKey])
 
   return (
-    <div className="p-6">
+    <div className="h-full flex flex-col px-2 pb-2">
 
 
       {loading ? (
-        <div className="h-56 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
+        <div className="flex-1 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
       ) : chartData.length === 0 ? (
-        <div className="h-56 flex flex-col items-center justify-center text-leather-400 text-sm gap-2">
+        <div className="flex-1 flex flex-col items-center justify-center text-leather-400 text-sm gap-2">
           <svg className="w-8 h-8 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 13.5l4.5-4.5 3 3 4-5 4 4" />
           </svg>
           No data yet — log your first set!
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={chartData} margin={{ top: 16, right: 16, left: -16, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
-            <XAxis dataKey="date" tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} />
-            <YAxis tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} unit={isBodyweight ? '' : ' kg'} />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: 12, color: '#6d728a' }} />
-            {userNames.map((name, i) => {
-              const color = COLORS[i % COLORS.length]
-              const isMe = currentUser?.name === name
-              return (
-                <Line
-                  key={name}
-                  type="monotone"
-                  dataKey={name}
-                  stroke={color}
-                  strokeWidth={2}
-                  dot={{ r: isMe ? 5 : 4, fill: color, strokeWidth: isMe ? 2 : 0, stroke: isMe ? '#fff' : undefined }}
-                  activeDot={{ r: 6 }}
-                  connectNulls
-                >
-                  <ErrorBar dataKey={`${name}__error`} direction="y" strokeWidth={1.5} stroke={color} opacity={0.4} width={4} />
-                </Line>
-              )
-            })}
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="flex-1 min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData} margin={{ top: 16, right: 16, left: -16, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+              <XAxis dataKey="date" tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} />
+              <YAxis tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} unit={isBodyweight ? '' : ' kg'} />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend wrapperStyle={{ fontSize: 12, color: '#6d728a' }} />
+              {userNames.map((name, i) => {
+                const color = COLORS[i % COLORS.length]
+                const isMe = currentUser?.name === name
+                return (
+                  <Line
+                    key={name}
+                    type="monotone"
+                    dataKey={name}
+                    stroke={color}
+                    strokeWidth={2}
+                    dot={{ r: isMe ? 5 : 4, fill: color, strokeWidth: isMe ? 2 : 0, stroke: isMe ? '#fff' : undefined }}
+                    activeDot={{ r: 6 }}
+                    connectNulls
+                  >
+                    <ErrorBar dataKey={`${name}__error`} direction="y" strokeWidth={1.5} stroke={color} opacity={0.4} width={4} />
+                  </Line>
+                )
+              })}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       )}
     </div>
   )
