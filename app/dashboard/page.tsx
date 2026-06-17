@@ -75,12 +75,12 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-leather-900">
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="w-7 h-7 rounded-full bg-gym-yellow flex items-center justify-center">
-            <svg className="w-3.5 h-3.5 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
-              <rect x="10.5" y="2" width="3" height="20" rx="1" />
-              <rect x="4" y="7" width="16" height="3" rx="1" />
-            </svg>
-          </div>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
+          >
+            Feed
+          </button>
           <div className="flex items-center gap-3">
             <Link href="/history" className="text-gym-red font-semibold text-sm hover:opacity-80 transition">{user.name}</Link>
             <button
