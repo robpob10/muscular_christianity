@@ -143,7 +143,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
       background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
       border: '1.5px solid transparent',
     }} className="rounded-2xl p-6">
-      <h2 className="text-lg font-bold text-white mb-5">Progress</h2>
+
 
       {loading ? (
         <div className="h-56 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
