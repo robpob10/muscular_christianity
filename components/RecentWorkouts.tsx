@@ -18,6 +18,7 @@ interface FeedItem {
 interface Props {
   refreshKey: number
   currentUser: { id: number; name: string } | null
+  startExpanded?: boolean
 }
 
 function groupSets(sets: SetEntry[]) {
@@ -56,10 +57,10 @@ function StarDisplay({ count }: { count: number }) {
   )
 }
 
-export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
+export default function RecentWorkouts({ refreshKey, currentUser, startExpanded = false }: Props) {
   const [items, setItems] = useState<FeedItem[]>([])
   const [fetchError, setFetchError] = useState(false)
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(startExpanded)
   const [localRefresh, setLocalRefresh] = useState(0)
   const [reactingKey, setReactingKey] = useState<string | null>(null)
   const [starValue, setStarValue] = useState(5)

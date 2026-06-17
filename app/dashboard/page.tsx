@@ -100,7 +100,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        {showFeed && <div ref={feedRef}><RecentWorkouts refreshKey={refreshKey} currentUser={user} /></div>}
+        {showFeed && <div ref={feedRef}><RecentWorkouts refreshKey={refreshKey} currentUser={user} startExpanded /></div>}
 
         {exercises.length === 0 ? (
           <div className="text-center text-leather-400 py-20">Loading exercises...</div>
