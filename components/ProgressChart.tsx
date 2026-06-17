@@ -136,13 +136,8 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
       .finally(() => setLoading(false))
   }, [exercise.id, refreshKey])
 
-  const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
-
   return (
-    <div style={{
-      background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
-      border: '1.5px solid transparent',
-    }} className="rounded-2xl p-6">
+    <div className="p-6">
 
 
       {loading ? (
