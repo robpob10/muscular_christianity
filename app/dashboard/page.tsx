@@ -83,7 +83,7 @@ export default function DashboardPage() {
               setShowFeed(opening)
               if (opening) setTimeout(() => feedRef.current?.scrollIntoView({ behavior: 'smooth' }), 50)
             }}
-            className={`text-xs border rounded px-3 py-1.5 transition ${showFeed ? 'text-leather-100 border-leather-400' : 'text-leather-400 hover:text-leather-100 border-leather-600 hover:border-leather-400'}`}
+            className={`text-xs border rounded px-3 py-1.5 transition ${showFeed ? 'text-leather-100 border-leather-400' : 'text-leather-600 hover:text-leather-100 border-leather-700 hover:border-leather-400'}`}
           >
             Feed
           </button>
