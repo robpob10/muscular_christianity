@@ -85,7 +85,7 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 }
 
 export default function ProgressChart({ exercise, refreshKey, currentUser }: ProgressChartProps) {
-  const [chartData, setChartData] = useState<Record<string, number | string | { weight: number; reps: number }[]>[]>([])
+  const [chartData, setChartData] = useState<Record<string, number | string | number[] | { weight: number; reps: number }[]>[]>([])
   const [userNames, setUserNames] = useState<string[]>([])
   const [isBodyweight, setIsBodyweight] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -118,7 +118,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
         })
 
         const points = Object.entries(byDate).map(([date, entries]) => {
-          const point: Record<string, number | string | { weight: number; reps: number }[]> = { date }
+          const point: Record<string, number | string | number[] | { weight: number; reps: number }[]> = { date }
           Object.entries(entries).forEach(([name, sets]) => {
             const vals = bw ? sets.map(s => s.reps) : sets.map(s => s.weight)
             const median = p50(vals)
