@@ -13,29 +13,31 @@ interface ExerciseTabsProps {
 }
 
 function capitalize(str: string): string {
-  return str
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+  return str.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+}
+
+const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
+const activeStyle = {
+  background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+  border: '2px solid transparent',
 }
 
 export default function ExerciseTabs({ exercises, activeExercise, onSelect, onAddClick }: ExerciseTabsProps) {
   return (
-    <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-hide">
-      <div className="flex items-center gap-1 flex-nowrap">
+    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="flex items-center gap-2 flex-nowrap">
         {exercises.map((exercise) => {
           const isActive = activeExercise?.id === exercise.id
           return (
             <button
               key={exercise.id}
               onClick={() => onSelect(exercise)}
-              className={`
-                whitespace-nowrap px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
-                ${isActive
-                  ? 'bg-leather-300 text-leather-900 shadow-lg shadow-leather-300/20'
-                  : 'bg-leather-800 text-leather-400 hover:bg-leather-700 hover:text-leather-100 border border-leather-600'
-                }
-              `}
+              style={isActive ? activeStyle : {}}
+              className={`whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+                isActive
+                  ? 'text-white'
+                  : 'text-leather-500 border border-leather-800 hover:text-leather-200 hover:border-leather-600'
+              }`}
             >
               {capitalize(exercise.name)}
             </button>
@@ -44,7 +46,7 @@ export default function ExerciseTabs({ exercises, activeExercise, onSelect, onAd
 
         <button
           onClick={onAddClick}
-          className="whitespace-nowrap px-3 py-2.5 rounded-lg text-sm font-bold transition-all duration-150 bg-leather-800 text-leather-400 hover:bg-leather-700 hover:text-leather-300 border border-leather-600 border-dashed"
+          className="whitespace-nowrap px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-150 text-leather-600 border border-dashed border-leather-800 hover:text-leather-300 hover:border-leather-600"
           title="Add exercise"
         >
           +

@@ -66,15 +66,15 @@ export default function DashboardPage() {
 
   if (status === 'loading' || !user) {
     return (
-      <div className="min-h-screen bg-leather-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-leather-300 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-leather-900">
-      <header className="bg-leather-900 px-4 py-3">
+    <div className="min-h-screen bg-black">
+      <header className="bg-black px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
             onClick={() => setShowFeed(f => !f)}

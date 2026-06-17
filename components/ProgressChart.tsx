@@ -136,9 +136,14 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
       .finally(() => setLoading(false))
   }, [exercise.id, refreshKey])
 
+  const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
+
   return (
-    <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
-      <h2 className="text-lg font-bold text-leather-100 mb-1">Progress</h2>
+    <div style={{
+      background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+      border: '1.5px solid transparent',
+    }} className="rounded-2xl p-6">
+      <h2 className="text-lg font-bold text-white mb-1">Progress</h2>
       <p className="text-leather-400 text-sm mb-5">{isBodyweight ? 'p50 reps · range min–max' : 'p50 weight (kg) · range min–max'}</p>
 
       {loading ? (

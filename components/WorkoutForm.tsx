@@ -10,7 +10,7 @@ function todayString() {
   return new Date().toISOString().slice(0, 10)
 }
 
-const inputCls = 'min-w-0 w-full bg-leather-700 border border-leather-600 rounded-lg px-2 py-2 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-1 focus:ring-leather-300 text-sm text-center transition'
+const inputCls = 'min-w-0 w-full bg-leather-900 border border-leather-700 rounded-xl px-2 py-2 text-white placeholder-leather-600 focus:outline-none focus:border-leather-500 text-sm text-center transition'
 
 const CATCHPHRASES = [
   'Let he who is without grip it cast the first rip it!',
@@ -75,8 +75,10 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
     }
   }
 
+  const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
+
   return (
-    <div className="bg-leather-800 rounded-2xl p-4 border border-leather-600">
+    <div>
       <form onSubmit={handleSubmit} className="space-y-2">
         <div className="grid gap-2 text-xs font-medium text-leather-400 uppercase tracking-wide"
           style={{ gridTemplateColumns: '1fr 1fr' }}>
@@ -93,13 +95,17 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
         <div className="flex items-center gap-2 pt-1">
           <label className="text-xs text-leather-400 uppercase tracking-wide shrink-0">Date</label>
           <input type="date" value={date} onChange={e => setDate(e.target.value)}
-            className="bg-leather-700 border border-leather-600 rounded-lg px-2 py-1.5 text-leather-100 focus:outline-none focus:ring-1 focus:ring-leather-300 text-sm transition" />
+            className="bg-leather-900 border border-leather-700 rounded-xl px-2 py-1.5 text-white focus:outline-none focus:border-leather-500 text-sm transition" />
         </div>
 
         {error && <p className="text-gym-red text-xs pt-1">{error}</p>}
 
         <button type="submit" disabled={loading}
-          className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 rounded-lg transition uppercase tracking-wide text-sm mt-1">
+          style={{
+            background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+            border: '2px solid transparent',
+          }}
+          className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition uppercase tracking-wide text-sm mt-1 hover:opacity-80">
           {loading ? 'Logging...' : 'Spread the Holy Word'}
         </button>
       </form>
