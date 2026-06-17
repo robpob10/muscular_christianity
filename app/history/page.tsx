@@ -14,6 +14,12 @@ interface SessionGroup {
   sets: SetEntry[]
 }
 
+const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
+const gradientBorder = {
+  background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+  border: '2px solid transparent',
+}
+
 function capitalize(s: string) {
   return s.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
@@ -80,18 +86,15 @@ export default function HistoryPage() {
     try {
       await fetch(`/api/history?userId=${user.id}&ids=${ids}`, { method: 'DELETE' })
       setGroups(prev => prev.filter(g => !(g.exercise_id === group.exercise_id && g.workout_date === group.workout_date)))
-    } catch {
-      // ignore
-    } finally {
-      setDeletingKey(null)
-    }
+    } catch {}
+    finally { setDeletingKey(null) }
   }
 
   return (
-    <div className="min-h-screen bg-leather-900">
-      <header className="bg-leather-900 px-4 py-3">
+    <div className="min-h-screen bg-black">
+      <header className="bg-black px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 text-leather-400 hover:text-leather-100 transition text-sm">
+          <Link href="/dashboard" className="flex items-center gap-2 text-leather-500 hover:text-white transition text-sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -101,7 +104,7 @@ export default function HistoryPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+      <main className="max-w-5xl mx-auto px-4 py-4">
         <div className="flex items-center gap-3 mb-6">
           {editingName ? (
             <form onSubmit={handleNameSave} className="flex items-center gap-2 flex-1">
@@ -109,25 +112,26 @@ export default function HistoryPage() {
                 type="text"
                 value={nameInput}
                 onChange={e => setNameInput(e.target.value)}
-                className="bg-leather-700 border border-leather-600 rounded-lg px-3 py-1.5 text-leather-100 focus:outline-none focus:ring-1 focus:ring-leather-300 text-sm"
+                className="bg-leather-900 border border-leather-700 rounded-xl px-3 py-1.5 text-white focus:outline-none focus:border-leather-500 text-sm"
                 autoFocus
               />
               <button type="submit" disabled={nameLoading}
-                className="text-xs bg-gym-yellow text-leather-900 font-bold px-3 py-1.5 rounded-lg disabled:opacity-50 transition">
+                style={gradientBorder}
+                className="text-xs text-white font-bold px-3 py-1.5 rounded-lg disabled:opacity-50 transition">
                 {nameLoading ? '…' : 'Save'}
               </button>
               <button type="button" onClick={() => { setEditingName(false); setNameError('') }}
-                className="text-xs text-leather-400 hover:text-leather-100 transition">
+                className="text-xs text-leather-500 hover:text-white transition">
                 Cancel
               </button>
               {nameError && <span className="text-xs text-gym-red">{nameError}</span>}
             </form>
           ) : (
             <>
-              <h1 className="text-leather-100 font-bold text-xl">{user?.name ?? 'History'}</h1>
+              <h1 className="text-white font-bold text-xl">{user?.name ?? 'History'}</h1>
               <button
                 onClick={() => { setNameInput(user?.name ?? ''); setEditingName(true) }}
-                className="text-leather-600 hover:text-leather-300 transition"
+                className="text-leather-700 hover:text-leather-300 transition"
                 title="Edit name"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,17 +143,17 @@ export default function HistoryPage() {
         </div>
 
         {loading ? (
-          <p className="text-leather-400 text-sm">Loading...</p>
+          <p className="text-leather-500 text-sm">Loading...</p>
         ) : groups.length === 0 ? (
-          <p className="text-leather-400 text-sm">No workouts logged yet.</p>
+          <p className="text-leather-500 text-sm">No workouts logged yet.</p>
         ) : (
-          <div className="bg-leather-800 rounded-2xl border border-leather-600 overflow-hidden">
+          <div style={gradientBorder} className="rounded-2xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-leather-600">
-                  <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs w-36">Exercise</th>
-                  <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs">Sets</th>
-                  <th className="text-left px-4 py-3 text-leather-400 font-medium uppercase tracking-wide text-xs w-16">Date</th>
+                <tr className="border-b border-leather-800">
+                  <th className="text-left px-4 py-3 text-leather-500 font-medium uppercase tracking-wide text-xs w-36">Exercise</th>
+                  <th className="text-left px-4 py-3 text-leather-500 font-medium uppercase tracking-wide text-xs">Sets</th>
+                  <th className="text-left px-4 py-3 text-leather-500 font-medium uppercase tracking-wide text-xs w-16">Date</th>
                   <th className="px-4 py-3 w-12"></th>
                 </tr>
               </thead>
@@ -158,12 +162,9 @@ export default function HistoryPage() {
                   const key = `${group.exercise_id}-${group.workout_date}`
                   const isDeleting = deletingKey === key
                   return group.sets.map((set, si) => (
-                    <tr key={`${key}-${si}`} className="border-b border-leather-700/50 last:border-0">
+                    <tr key={`${key}-${si}`} className="border-b border-leather-900 last:border-0">
                       {si === 0 && (
-                        <td
-                          rowSpan={group.sets.length}
-                          className="px-4 py-2 text-leather-100 font-medium align-top pt-3"
-                        >
+                        <td rowSpan={group.sets.length} className="px-4 py-2 text-white font-medium align-top pt-3">
                           {capitalize(group.exercise_name)}
                         </td>
                       )}
@@ -171,7 +172,7 @@ export default function HistoryPage() {
                         {parseFloat(set.weight_kg) > 0 ? `${parseFloat(set.weight_kg)}kg` : 'BW'} ×{set.reps}
                       </td>
                       {si === 0 && (
-                        <td rowSpan={group.sets.length} className="px-4 py-2 text-leather-400 align-top pt-3 whitespace-nowrap">
+                        <td rowSpan={group.sets.length} className="px-4 py-2 text-leather-500 align-top pt-3 whitespace-nowrap">
                           {formatDate(group.workout_date)}
                         </td>
                       )}
@@ -180,7 +181,7 @@ export default function HistoryPage() {
                           <button
                             onClick={() => handleDelete(group)}
                             disabled={isDeleting}
-                            className="text-leather-600 hover:text-gym-red disabled:opacity-40 transition"
+                            className="text-leather-700 hover:text-gym-red disabled:opacity-40 transition"
                             title="Delete session"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

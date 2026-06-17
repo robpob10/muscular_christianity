@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
+const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
+const gradientBorder = {
+  background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+  border: '2px solid transparent',
+}
+
 export default function SetupPage() {
   const { data: session, status } = useSession()
   const [name, setName] = useState('')
@@ -28,7 +34,6 @@ export default function SetupPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim() }),
       })
-      const data = await res.json()
       if (!res.ok) { setError('Something went wrong — please try again'); return }
       router.push('/dashboard')
     } catch {
@@ -40,51 +45,38 @@ export default function SetupPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-leather-900 flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-leather-300 border-t-transparent rounded-full animate-spin" />
+      <div className="h-screen bg-black flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-leather-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-leather-900 flex items-start justify-center px-4 pt-12">
-      <div className="w-full max-w-md">
+    <div className="h-screen bg-black flex items-center justify-center px-6">
+      <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gym-yellow mb-6 shadow-lg">
-            <svg className="w-10 h-10 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
-              <rect x="10.5" y="2" width="3" height="20" rx="1" />
-              <rect x="4" y="7" width="16" height="3" rx="1" />
-            </svg>
-          </div>
-          <h1 className="text-4xl font-black text-leather-100 tracking-tight uppercase">
+          <h1 className="text-4xl font-black text-white tracking-tight uppercase mb-4">
             Muscular Christianity
           </h1>
+          <p className="text-leather-500 text-sm">What is thy name?</p>
         </div>
 
-        <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
-          <p className="text-leather-400 text-sm text-center mb-6">
-            What is thy name?
-          </p>
+        <div style={gradientBorder} className="rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-leather-400 mb-2">
-                Your Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="e.g. George Williams"
-                className="w-full bg-leather-700 border border-leather-600 rounded-lg px-4 py-3 text-leather-100 placeholder-leather-500 focus:outline-none focus:ring-2 focus:ring-leather-300 focus:border-transparent transition"
-                autoFocus
-              />
-              {error && <p className="mt-2 text-sm text-gym-red">{error}</p>}
-            </div>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="e.g. George Williams"
+              className="w-full bg-leather-900 border border-leather-700 rounded-xl px-4 py-3 text-white placeholder-leather-600 focus:outline-none focus:border-leather-500 transition text-sm"
+              autoFocus
+            />
+            {error && <p className="text-sm text-gym-red">{error}</p>}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gym-yellow hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-leather-900 font-bold py-3 px-6 rounded-lg transition uppercase tracking-wide text-sm"
+              style={gradientBorder}
+              className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-xl transition uppercase tracking-wide text-sm"
             >
               {loading ? 'Saving…' : 'Enter the Gymdom of Heaven'}
             </button>

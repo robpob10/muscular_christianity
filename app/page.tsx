@@ -4,6 +4,12 @@ import { useEffect } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
+const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
+const gradientBorder = {
+  background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
+  border: '2px solid transparent',
+}
+
 export default function LoginPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -14,35 +20,28 @@ export default function LoginPage() {
 
   if (status === 'loading' || status === 'authenticated') {
     return (
-      <div className="min-h-screen bg-leather-900 flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-leather-300 border-t-transparent rounded-full animate-spin" />
+      <div className="h-screen bg-black flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-leather-400 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-leather-900 flex items-start justify-center px-4 pt-12">
-      <div className="w-full max-w-md">
+    <div className="h-screen bg-black flex items-center justify-center px-6">
+      <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gym-yellow mb-6 shadow-lg">
-            <svg className="w-10 h-10 text-leather-900" viewBox="0 0 24 24" fill="currentColor">
-              <rect x="10.5" y="2" width="3" height="20" rx="1" />
-              <rect x="4" y="7" width="16" height="3" rx="1" />
-            </svg>
-          </div>
-          <h1 className="text-4xl font-black text-leather-100 tracking-tight uppercase">
+          <h1 className="text-4xl font-black text-white tracking-tight uppercase mb-4">
             Muscular Christianity
           </h1>
-        </div>
-
-        <div className="bg-leather-800 rounded-2xl p-8 border border-leather-600 shadow-2xl">
-          <p className="text-center italic font-medium text-gym-yellow whitespace-pre-line mb-8">
+          <p className="italic text-leather-500 text-sm leading-relaxed whitespace-pre-line">
             {"Our Father\nFull of grace\nHallowed be his gains"}
           </p>
+        </div>
 
+        <div style={gradientBorder} className="rounded-2xl p-8">
           <button
             onClick={() => signIn('google')}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-800 font-semibold py-3 px-6 rounded-lg transition text-sm"
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-3 px-6 rounded-xl transition text-sm"
           >
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
