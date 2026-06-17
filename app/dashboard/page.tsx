@@ -83,7 +83,16 @@ export default function DashboardPage() {
             Feed
           </button>
           <div className="flex items-center gap-3">
-            <Link href="/history" className="text-gym-red font-semibold text-sm hover:opacity-80 transition">{user.name}</Link>
+            <Link href="/history" className="hover:opacity-80 transition">
+              {session?.user?.image ? (
+                <img src={session.user.image} alt={user.name} referrerPolicy="no-referrer"
+                  className="w-7 h-7 rounded-full object-cover" />
+              ) : (
+                <div className="w-7 h-7 rounded-full bg-gym-red flex items-center justify-center text-xs font-bold text-white">
+                  {user.name.charAt(0)}
+                </div>
+              )}
+            </Link>
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
               className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
