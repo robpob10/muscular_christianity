@@ -18,7 +18,6 @@ interface FeedItem {
 interface Props {
   refreshKey: number
   currentUser: { id: number; name: string } | null
-  startExpanded?: boolean
 }
 
 function groupSets(sets: SetEntry[]) {
@@ -57,10 +56,9 @@ function StarDisplay({ count }: { count: number }) {
   )
 }
 
-export default function RecentWorkouts({ refreshKey, currentUser, startExpanded = false }: Props) {
+export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
   const [items, setItems] = useState<FeedItem[]>([])
   const [fetchError, setFetchError] = useState(false)
-  const [expanded, setExpanded] = useState(startExpanded)
   const [localRefresh, setLocalRefresh] = useState(0)
   const [reactingKey, setReactingKey] = useState<string | null>(null)
   const [starValue, setStarValue] = useState(5)
@@ -72,9 +70,8 @@ export default function RecentWorkouts({ refreshKey, currentUser, startExpanded 
   }
 
   useEffect(() => {
-    const limit = expanded ? 50 : 1
     setFetchError(false)
-    fetch(`/api/recent?limit=${limit}`)
+    fetch(`/api/recent?limit=50`)
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -84,7 +81,7 @@ export default function RecentWorkouts({ refreshKey, currentUser, startExpanded 
         }
       })
       .catch(() => setFetchError(true))
-  }, [refreshKey, expanded, localRefresh])
+  }, [refreshKey, localRefresh])
 
   async function handleReact(item: FeedItem) {
     setSubmitting(true)
@@ -222,25 +219,6 @@ export default function RecentWorkouts({ refreshKey, currentUser, startExpanded 
         })}
       </div>
 
-      <div className="mt-2 text-center">
-        {!expanded ? (
-          items.length >= 1 && (
-            <button
-              onClick={() => setExpanded(true)}
-              className="text-leather-500 hover:text-leather-300 text-xs transition"
-            >
-              Show more
-            </button>
-          )
-        ) : (
-          <button
-            onClick={() => setExpanded(false)}
-            className="text-leather-500 hover:text-leather-300 text-xs transition"
-          >
-            Show less
-          </button>
-        )}
-      </div>
     </div>
   )
 }
