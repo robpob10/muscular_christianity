@@ -104,7 +104,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        {showFeed && <RecentWorkouts refreshKey={refreshKey} currentUser={user} />}
+        {showFeed && <RecentWorkouts refreshKey={refreshKey} currentUser={user} currentUserImage={session?.user?.image} />}
 
         {!showFeed && (exercises.length === 0 ? (
           <div className="text-center text-leather-400 py-20">Loading exercises...</div>
