@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, Legend, ResponsiveContainer,
+  Tooltip, Legend, ResponsiveContainer, ErrorBar,
 } from 'recharts'
 
 interface User { id: number; name: string }
@@ -27,17 +27,12 @@ interface ProgressChartProps {
 
 const COLORS = ['#00d4c8','#60a5fa','#a78bfa','#f472b6','#fb923c','#facc15','#22d3ee','#f87171']
 
-function avgWeightTopReps(sets: { weight: number; reps: number }[], target = 15): number {
-  const sorted = [...sets].sort((a, b) => b.weight - a.weight)
-  let totalReps = 0
-  const picked: number[] = []
-  for (const s of sorted) {
-    if (totalReps >= target) break
-    totalReps += s.reps
-    picked.push(s.weight)
-  }
-  if (picked.length === 0) return 0
-  return Math.round((picked.reduce((a, b) => a + b, 0) / picked.length) * 10) / 10
+function p50(values: number[]): number {
+  if (values.length === 0) return 0
+  const sorted = [...values].sort((a, b) => a - b)
+  const mid = Math.floor(sorted.length / 2)
+  const raw = sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]
+  return Math.round(raw * 10) / 10
 }
 
 function formatDate(iso: string) {
@@ -125,9 +120,12 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
         const points = Object.entries(byDate).map(([date, entries]) => {
           const point: Record<string, number | string | { weight: number; reps: number }[]> = { date }
           Object.entries(entries).forEach(([name, sets]) => {
-            point[name] = bw
-              ? Math.max(...sets.map(s => s.reps))
-              : avgWeightTopReps(sets)
+            const vals = bw ? sets.map(s => s.reps) : sets.map(s => s.weight)
+            const median = p50(vals)
+            const min = Math.min(...vals)
+            const max = Math.max(...vals)
+            point[name] = median
+            point[`${name}__error`] = [median - min, max - median]
             point[`${name}__allsets`] = sets
           })
           return point
@@ -141,7 +139,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   return (
     <div className="bg-leather-800 rounded-2xl p-6 border border-leather-600">
       <h2 className="text-lg font-bold text-leather-100 mb-1">Progress</h2>
-      <p className="text-leather-400 text-sm mb-5">{isBodyweight ? 'Max reps per set' : 'Avg weight (kg) — top 15 reps'}</p>
+      <p className="text-leather-400 text-sm mb-5">{isBodyweight ? 'p50 reps · range min–max' : 'p50 weight (kg) · range min–max'}</p>
 
       {loading ? (
         <div className="h-56 flex items-center justify-center text-leather-400 text-sm">Loading...</div>
@@ -173,7 +171,9 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
                   dot={{ r: isMe ? 5 : 4, fill: color, strokeWidth: isMe ? 2 : 0, stroke: isMe ? '#fff' : undefined }}
                   activeDot={{ r: 6 }}
                   connectNulls
-                />
+                >
+                  <ErrorBar dataKey={`${name}__error`} direction="y" strokeWidth={1.5} stroke={color} opacity={0.4} width={4} />
+                </Line>
               )
             })}
           </LineChart>
