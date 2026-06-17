@@ -71,7 +71,7 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
   }
 
   useEffect(() => {
-    const limit = expanded ? 50 : 3
+    const limit = expanded ? 50 : 1
     setFetchError(false)
     fetch(`/api/recent?limit=${limit}`)
       .then(r => r.json())
@@ -223,7 +223,7 @@ export default function RecentWorkouts({ refreshKey, currentUser }: Props) {
 
       <div className="mt-3 text-center">
         {!expanded ? (
-          items.length >= 3 && (
+          items.length >= 1 && (
             <button
               onClick={() => setExpanded(true)}
               className="text-leather-500 hover:text-leather-300 text-xs transition"
