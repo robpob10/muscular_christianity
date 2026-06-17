@@ -19,6 +19,7 @@ export default function DashboardPage() {
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [showFeed, setShowFeed] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const router = useRouter()
 
@@ -76,8 +77,8 @@ export default function DashboardPage() {
       <header className="bg-leather-900 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-xs text-leather-400 hover:text-leather-100 border border-leather-600 hover:border-leather-400 rounded px-3 py-1.5 transition"
+            onClick={() => setShowFeed(f => !f)}
+            className={`text-xs border rounded px-3 py-1.5 transition ${showFeed ? 'text-leather-100 border-leather-400' : 'text-leather-400 hover:text-leather-100 border-leather-600 hover:border-leather-400'}`}
           >
             Feed
           </button>
@@ -94,7 +95,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-6">
-        <RecentWorkouts refreshKey={refreshKey} currentUser={user} />
+        {showFeed && <RecentWorkouts refreshKey={refreshKey} currentUser={user} />}
 
         {exercises.length === 0 ? (
           <div className="text-center text-leather-400 py-20">Loading exercises...</div>
