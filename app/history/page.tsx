@@ -91,7 +91,7 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="fixed inset-0 bg-black overflow-y-auto">
       <header className="bg-black px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 text-leather-500 hover:text-white transition text-sm">
