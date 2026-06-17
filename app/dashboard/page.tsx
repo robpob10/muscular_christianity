@@ -103,7 +103,7 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
+      <main className="max-w-5xl mx-auto px-4 py-2">
         {showFeed && <RecentWorkouts refreshKey={refreshKey} currentUser={user} currentUserImage={session?.user?.image} />}
 
         {!showFeed && (exercises.length === 0 ? (
@@ -117,7 +117,7 @@ export default function DashboardPage() {
               onAddClick={() => setShowAddModal(true)}
             />
             {activeExercise && (
-              <div className="mt-6 space-y-6">
+              <div className="mt-3 space-y-4">
                 <ProgressChart exercise={activeExercise} refreshKey={refreshKey} currentUser={user} />
                 <WorkoutForm user={user} exercise={activeExercise} onLogged={handleWorkoutLogged} />
               </div>
