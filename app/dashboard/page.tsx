@@ -123,7 +123,7 @@ export default function DashboardPage() {
               />
             </div>
             {activeExercise && (
-              <div className="flex-1 min-h-0 flex flex-col mt-3 gap-4">
+              <div className="flex-1 min-h-0 flex flex-col mt-3 gap-2">
                 <div className="flex-1 min-h-0">
                   <ProgressChart exercise={activeExercise} refreshKey={refreshKey} currentUser={user} />
                 </div>

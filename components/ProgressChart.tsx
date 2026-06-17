@@ -137,7 +137,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   }, [exercise.id, refreshKey])
 
   return (
-    <div className="h-full flex flex-col px-2 pb-2">
+    <div className="h-full flex flex-col px-2">
 
 
       {loading ? (
