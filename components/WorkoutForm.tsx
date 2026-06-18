@@ -12,19 +12,13 @@ function todayString() {
 
 const inputCls = 'min-w-0 w-full bg-leather-900 border border-leather-700 rounded-xl px-2 py-2 text-white placeholder-leather-600 focus:outline-none focus:border-leather-500 text-sm text-center transition'
 
-const CATCHPHRASES = [
-  'Let he who is without grip it cast the first rip it!',
-  'And then Onan spilled his protein shake on the ground',
-  'Jesus, king of the Juiced',
-  'On the 7th day god rested. Rest day is important',
-]
+const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
 
 export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormProps) {
   const [reps, setReps] = useState('')
   const [weight, setWeight] = useState('')
   const [date, setDate] = useState(todayString())
   const [loading, setLoading] = useState(false)
-  const [catchphrase, setCatchphrase] = useState<string | null>(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -66,7 +60,6 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Failed to log')
       }
-      setCatchphrase(CATCHPHRASES[Math.floor(Math.random() * CATCHPHRASES.length)])
       onLogged()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to log workout.')
@@ -74,8 +67,6 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
       setLoading(false)
     }
   }
-
-  const GRAD = 'linear-gradient(135deg, #f87171 0%, #fb923c 50%, #A67C52 100%)'
 
   return (
     <div className="px-4">
@@ -109,30 +100,6 @@ export default function WorkoutForm({ user, exercise, onLogged }: WorkoutFormPro
           {loading ? 'Logging...' : 'Record Set'}
         </button>
       </form>
-
-      {catchphrase && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80"
-          onClick={() => setCatchphrase(null)}
-        >
-          <div
-            style={{
-              background: `linear-gradient(#000, #000) padding-box, ${GRAD} border-box`,
-              border: '2px solid transparent',
-            }}
-            className="rounded-2xl p-8 max-w-sm w-full text-center"
-            onClick={e => e.stopPropagation()}
-          >
-            <p className="text-white text-base leading-relaxed break-words">{catchphrase}</p>
-            <button
-              onClick={() => setCatchphrase(null)}
-              className="mt-6 text-xs text-leather-500 hover:text-white uppercase tracking-widest transition"
-            >
-              Amen
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
