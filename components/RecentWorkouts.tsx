@@ -105,9 +105,8 @@ function StoriesRow({ items, currentUser, currentUserImage }: {
   }
   if (users.length === 0) return null
   return (
-    <div className="-mx-4 px-4 overflow-x-auto border-b border-leather-800 pb-4 mb-0"
-      style={{ scrollbarWidth: 'none' }}>
-      <div className="flex gap-4 w-max">
+    <div className="border-b border-leather-800 pb-4 mb-0">
+      <div className="flex flex-wrap gap-4">
         {users.map((u) => (
           <StoryBubble
             key={u.id}
