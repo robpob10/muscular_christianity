@@ -161,7 +161,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
       ) : (
         <div className="flex-1 min-h-0">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 16, right: 16, left: -16, bottom: 0 }}>
+            <LineChart data={chartData} margin={{ top: 24, right: 24, left: -16, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
               <XAxis dataKey="date" tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} />
               <YAxis tick={{ fill: '#6d728a', fontSize: 11 }} axisLine={{ stroke: '#484d6e' }} tickLine={false} unit={isBodyweight ? '' : ' kg'} />
