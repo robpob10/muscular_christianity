@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer, ErrorBar,
@@ -89,8 +89,6 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
   const [userNames, setUserNames] = useState<string[]>([])
   const [isBodyweight, setIsBodyweight] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [isFlashing, setIsFlashing] = useState(false)
-  const prevRefreshKey = useRef(refreshKey)
 
   useEffect(() => {
     setLoading(true)
@@ -135,14 +133,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
         setChartData(points)
       })
       .catch(() => { setChartData([]); setUserNames([]) })
-      .finally(() => {
-        setLoading(false)
-        if (refreshKey !== prevRefreshKey.current) {
-          prevRefreshKey.current = refreshKey
-          setIsFlashing(true)
-          setTimeout(() => setIsFlashing(false), 1000)
-        }
-      })
+      .finally(() => setLoading(false))
   }, [exercise.id, refreshKey])
 
   return (
@@ -170,7 +161,6 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
               {userNames.map((name, i) => {
                 const color = COLORS[i % COLORS.length]
                 const isMe = currentUser?.name === name
-                const lastIdx = chartData.length - 1
                 return (
                   <Line
                     key={name}
@@ -178,20 +168,7 @@ export default function ProgressChart({ exercise, refreshKey, currentUser }: Pro
                     dataKey={name}
                     stroke={color}
                     strokeWidth={2}
-                    dot={(props: { cx?: number; cy?: number; index?: number }) => {
-                      const { cx = 0, cy = 0, index = 0 } = props
-                      const flash = isMe && isFlashing && index === lastIdx
-                      return (
-                        <g key={index}>
-                          <circle cx={cx} cy={cy} r={isMe ? 5 : 4} fill={color}
-                            stroke={isMe ? '#fff' : 'none'} strokeWidth={isMe ? 2 : 0} />
-                          {flash && (
-                            <circle cx={cx} cy={cy} r={6} fill="none"
-                              stroke="#fb923c" strokeWidth={2.5} className="dot-flash" />
-                          )}
-                        </g>
-                      )
-                    }}
+                    dot={{ r: isMe ? 5 : 4, fill: color, strokeWidth: isMe ? 2 : 0, stroke: isMe ? '#fff' : undefined }}
                     activeDot={{ r: 6 }}
                     connectNulls
                   >
