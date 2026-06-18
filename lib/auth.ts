@@ -10,4 +10,14 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: { signIn: '/' },
   session: { strategy: 'jwt' },
+  callbacks: {
+    async jwt({ token, profile }) {
+      if (profile) token.picture = (profile as { picture?: string }).picture ?? token.picture
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) session.user.image = (token.picture as string) ?? null
+      return session
+    },
+  },
 }

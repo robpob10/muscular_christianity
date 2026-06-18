@@ -81,7 +81,7 @@ function StoryBubble({ userId, name, isOwn, imageUrl }: {
   return (
     <div className="flex flex-col items-center gap-1.5 flex-shrink-0" style={{ width: 64 }}>
       <div style={{ padding: 2, borderRadius: '50%', background: isOwn ? '#484d6e' : STORY_GRADIENT }}>
-        <div style={{ padding: 2, borderRadius: '50%', background: '#191c2d' }}>
+        <div style={{ padding: 2, borderRadius: '50%', background: '#000' }}>
           <UserAvatar userId={userId} name={name} size={46} imageUrl={isOwn ? imageUrl : undefined} />
         </div>
       </div>
@@ -241,9 +241,9 @@ export default function RecentWorkouts({ refreshKey, currentUser, currentUserIma
           const groups = groupSets(item.sets)
 
           return (
-            <div key={key} className="border-b border-leather-800 py-4">
+            <div key={key} className="border-b border-leather-800 py-2.5">
               {/* Post header */}
-              <div className="flex items-center gap-2.5 mb-3">
+              <div className="flex items-center gap-2.5 mb-1.5">
                 <UserAvatar userId={item.user_id} name={item.user_name} size={34} />
                 <div className="flex-1 min-w-0">
                   <span className="text-leather-100 font-semibold text-sm">{item.user_name}</span>
@@ -253,7 +253,7 @@ export default function RecentWorkouts({ refreshKey, currentUser, currentUserIma
               </div>
 
               {/* Sets content */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1 mb-3 pl-[42px]">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mb-1.5 pl-[42px]">
                 {groups.map((g, i) => <SetsPill key={i} group={g} />)}
               </div>
 
