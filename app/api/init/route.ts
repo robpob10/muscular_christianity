@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 const DEFAULT_EXERCISES = [
   'bench press',
   'leg press',
-  'seated military press',
+  'shoulder push',
   'hammer curls',
   'dips',
   'tricep pulldown',
@@ -86,6 +86,9 @@ export async function GET() {
         created_at TIMESTAMPTZ DEFAULT NOW()
       )
     `
+
+    // Rename exercises
+    await sql`UPDATE exercises SET name = 'shoulder push' WHERE name = 'seated military press'`
 
     // Seed default exercises if table is empty
     const { rowCount } = await sql`SELECT id FROM exercises LIMIT 1`
