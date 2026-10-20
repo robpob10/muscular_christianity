@@ -1,14 +1,19 @@
 import { sql } from '@vercel/postgres'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get('userId')
+
+    // The user's most recently done exercises first, then the rest by when anyone last did them
     const { rows } = await sql`
-      SELECT e.id, e.name, COUNT(wl.id) as log_count
+      SELECT e.id, e.name
       FROM exercises e
       INNER JOIN workout_logs wl ON wl.exercise_id = e.id AND wl.deleted = FALSE
       GROUP BY e.id, e.name
-      ORDER BY log_count DESC, e.created_at ASC
+      ORDER BY MAX(wl.logged_at) FILTER (WHERE wl.user_id = ${userId}) DESC NULLS LAST,
+               MAX(wl.logged_at) DESC
     `
     return NextResponse.json(rows)
   } catch (error) {
