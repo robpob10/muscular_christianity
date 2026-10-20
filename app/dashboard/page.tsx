@@ -25,14 +25,14 @@ export default function DashboardPage() {
 
   const fetchExercises = useCallback(async () => {
     try {
-      const res = await fetch('/api/exercises')
+      const res = await fetch(`/api/exercises?userId=${user?.id}`)
       if (res.ok) {
         const data = await res.json()
         setExercises(data)
         if (data.length > 0 && !activeExercise) setActiveExercise(data[0])
       }
     } catch { /* ignore */ }
-  }, [activeExercise])
+  }, [activeExercise, user])
 
   useEffect(() => {
     if (status === 'unauthenticated') { router.push('/'); return }
